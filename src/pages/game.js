@@ -13,29 +13,35 @@ import { useMachine } from "@xstate/react"
 
 const GamePage = () => {
   const [state, send] = useMachine(pokerMachine)
-  const mapCards = (item, index) => (
-    <div className="card-unit" key={index}>
+  const mapCards = (item, index) => {
+    const held = state.context.holds[index]
+    return (
       <div
-        className="card"
-        onClick={e => {
-          e.preventDefault()
-          send(`HOLD_TOGGLE_${index + 1}`)
-        }}
+        className={`card-unit key${index} ${held ? "hold" : ""}`}
+        key={index}
       >
-        {item}
-      </div>
-      {state.value !== "score" && (
-        <button
+        <div
+          className="card"
           onClick={e => {
             e.preventDefault()
             send(`HOLD_TOGGLE_${index + 1}`)
           }}
         >
-          {state.context.holds[index] ? "Held" : "Hold"}
-        </button>
-      )}
-    </div>
-  )
+          {item}
+        </div>
+        {state.value !== "score" && (
+          <button
+            onClick={e => {
+              e.preventDefault()
+              send(`HOLD_TOGGLE_${index + 1}`)
+            }}
+          >
+            {held ? "Held" : "Hold"}
+          </button>
+        )}
+      </div>
+    )
+  }
   return (
     <Layout>
       <SEO title="Video Poker" />
@@ -65,7 +71,7 @@ const GamePage = () => {
         </button>
       )}
       <h3>{state.value}</h3>
-      <pre>{JSON.stringify(state.context, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(state.context, null, 2)}</pre> */}
     </Layout>
   )
 }

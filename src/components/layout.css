@@ -605,10 +605,13 @@ pre tt:after {
   display: block;
   width: -webkit-fill-available;
 }
+.card-unit.hold .card {
+  border-color: red;
+}
 .card {
   font-size: 5vw;
   text-align: center;
-  line-height: 16vw;
+  line-height: 20vw;
   border: 2px solid black;
   border-radius: 1vw;
   padding: 1vw;

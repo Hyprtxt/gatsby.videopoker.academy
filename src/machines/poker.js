@@ -1,5 +1,6 @@
 import { Machine, assign } from "xstate"
-import Poker from "../poker"
+
+const API_HOST = "http://localhost:1337"
 
 const holdToggle = hold_index =>
   assign({
@@ -18,13 +19,13 @@ const holdCard = hold_index =>
   })
 
 const fetchGame = () =>
-  fetch(`http://localhost:1337/play`, {
+  fetch(`${API_HOST}/play`, {
     method: "POST",
   }).then(response => response.json())
 
 const fetchResults = (game_id, data) => {
-  console.log("Doing a fetch", `http://localhost:1337/draw/${game_id}`)
-  return fetch(`http://localhost:1337/draw/${game_id}`, {
+  // console.log("Doing a fetch", `${API_HOST}/draw/${game_id}`)
+  return fetch(`${API_HOST}/draw/${game_id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
