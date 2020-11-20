@@ -5,7 +5,11 @@ import SEO from "../components/seo"
 import pokerMachine from "../machines/poker"
 import { useMachine } from "@xstate/react"
 
-const Card = ({ children }) => <div>{children}</div>
+// const Card = ({ item, index, send, buttonText }) => {
+//   return (
+
+//   )
+// }
 
 const GamePage = () => {
   const [state, send] = useMachine(pokerMachine)
@@ -15,8 +19,16 @@ const GamePage = () => {
       <p>Something</p>
       {state.value === "active" &&
         state.context.hand.map((item, index) => (
-          <div key={index}>
-            <Card>{item}</Card>
+          <div className="card-unit" key={index}>
+            <div
+              className="card"
+              onClick={e => {
+                e.preventDefault()
+                send(`HOLD_TOGGLE_${index + 1}`)
+              }}
+            >
+              {item}
+            </div>
             <button
               onClick={e => {
                 e.preventDefault()
@@ -27,9 +39,10 @@ const GamePage = () => {
             </button>
           </div>
         ))}
-      <h3>{state.value}</h3>
-      <pre>{JSON.stringify(state.context, null, 2)}</pre>
-      {state.value === "idle" && (
+      {state.value === "score" && (
+        <pre>{JSON.stringify(state.context.result, null, 2)}</pre>
+      )}
+      {(state.value === "idle" || state.value === "score") && (
         <button
           onClick={e => {
             e.preventDefault()
@@ -49,6 +62,9 @@ const GamePage = () => {
           SCORE
         </button>
       )}
+
+      <h3>{state.value}</h3>
+      <pre>{JSON.stringify(state.context, null, 2)}</pre>
     </Layout>
   )
 }

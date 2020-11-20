@@ -595,3 +595,23 @@ pre tt:after {
     font-size: 100%;
   }
 }
+
+.card-unit {
+  width: 20%;
+  float: left;
+}
+.card-unit button {
+  margin: 1vw;
+  display: block;
+  width: -webkit-fill-available;
+}
+.card {
+  font-size: 5vw;
+  text-align: center;
+  line-height: 16vw;
+  border: 2px solid black;
+  border-radius: 1vw;
+  padding: 1vw;
+  margin: 0 1vw;
+  user-select: none;
+}
