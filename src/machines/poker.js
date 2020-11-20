@@ -121,6 +121,7 @@ const pokerMachine = () =>
             target: "draw",
             actions: assign({
               draw: (context, event) => event.data.Draw,
+              result: (context, event) => event.data.Result,
               final_cards: (context, event) => event.data.FinalCards,
             }),
           },
@@ -135,7 +136,7 @@ const pokerMachine = () =>
             target: "score",
             actions: assign({
               holds: [false, false, false, false, false],
-              result: (context, event) => Poker.Score(context.final_cards),
+              // result: (context, event) => Poker.Score(context.final_cards),
             }),
           },
         },
