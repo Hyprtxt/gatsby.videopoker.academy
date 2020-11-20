@@ -15,17 +15,17 @@ const GamePage = () => {
       <p>Something</p>
       {state.value === "active" &&
         state.context.hand.map((item, index) => (
-          <>
-            <Card key={index}>{item}</Card>
+          <div key={index}>
+            <Card>{item}</Card>
             <button
               onClick={e => {
                 e.preventDefault()
                 send(`HOLD_TOGGLE_${index + 1}`)
               }}
             >
-              Hold
+              {state.context.holds[index] ? "Held" : "Hold"}
             </button>
-          </>
+          </div>
         ))}
       <h3>{state.value}</h3>
       <pre>{JSON.stringify(state.context, null, 2)}</pre>

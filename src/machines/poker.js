@@ -17,10 +17,19 @@ const holdCard = hold_index =>
       ),
   })
 
-const fetchGame = () => {
-  console.log("Doing a fetch")
-  return fetch(`http://localhost:1337/play`, {
+const fetchGame = () =>
+  fetch(`http://localhost:1337/play`, {
     method: "POST",
+  }).then(response => response.json())
+
+const fetchResults = (game_id, data) => {
+  console.log("Doing a fetch", `http://localhost:1337/draw/${game_id}`)
+  return fetch(`http://localhost:1337/draw/${game_id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
   }).then(response => response.json())
 }
 
@@ -28,6 +37,7 @@ const pokerMachine = () =>
   Machine({
     initial: "idle",
     context: {
+      game_id: null,
       hand: null,
       draw: null,
       final_cards: null,
@@ -50,6 +60,7 @@ const pokerMachine = () =>
             target: "active",
             actions: assign({
               hand: (context, event) => event.data.Hand,
+              game_id: (context, event) => event.data.id,
             }),
           },
           onError: {
@@ -95,33 +106,43 @@ const pokerMachine = () =>
             }),
           },
           SCORE: {
-            // target: "loadingResults",
-            target: "draw",
+            target: "loadingResults",
+            // target: "draw",
           },
         },
       },
-      // loadingResults: {
-      //   on: {
-      //     COMPLETE: {
-      //       target: "draw",
-      //       actions: assign({
-      //         final_cards: (context, event) => {
-      //           const { hand, draw } = context
-      //           return context.holds.map((hold, index) =>
-      //             hold ? hand[index] : draw.splice(0, 1)[0]
-      //           )
-      //         },
-      //       }),
-      //     },
-      //   },
-      // },
+      loadingResults: {
+        invoke: {
+          id: "getResult",
+          src: (context, event) =>
+            fetchResults(context.game_id, { Holds: context.holds }),
+          onDone: {
+            target: "draw",
+            actions: assign({
+              draw: (context, event) => {
+                console.log(event, "ME")
+                return event.data.Draw
+              },
+              // final_cards: (context, event) => {
+              //   const { hand, draw } = context
+              //   return context.holds.map((hold, index) =>
+              //     hold ? hand[index] : draw.splice(0, 1)[0]
+              //   )
+              // },
+            }),
+          },
+          onError: {
+            target: "failure",
+          },
+        },
+      },
       draw: {
         on: {
           "": {
             // target: "score",
             target: "idle",
             actions: assign({
-              result: (context, event) => Poker.Score(context.final_cards),
+              result: (context, event) => Poker.Score(context.hand),
             }),
           },
         },
