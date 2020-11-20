@@ -1,4 +1,3 @@
-"use strict"
 import Deck from "./deck"
 
 const getHandSuitsValuesSorted = input_cards => {

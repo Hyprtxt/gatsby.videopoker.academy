@@ -12,11 +12,23 @@ const GamePage = () => {
   return (
     <Layout>
       <SEO title="Video Poker" />
+      <p>Something</p>
       {state.value === "active" &&
         state.context.hand.map((item, index) => (
-          <Card key={index}>{item}</Card>
+          <>
+            <Card key={index}>{item}</Card>
+            <button
+              onClick={e => {
+                e.preventDefault()
+                send(`HOLD_TOGGLE_${index + 1}`)
+              }}
+            >
+              Hold
+            </button>
+          </>
         ))}
-      <pre>{JSON.stringify(state, null, 2)}</pre>
+      <h3>{state.value}</h3>
+      <pre>{JSON.stringify(state.context, null, 2)}</pre>
       {state.value === "idle" && (
         <button
           onClick={e => {
