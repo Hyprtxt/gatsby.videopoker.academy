@@ -13,32 +13,34 @@ import { useMachine } from "@xstate/react"
 
 const GamePage = () => {
   const [state, send] = useMachine(pokerMachine)
+  const mapCards = (item, index) => (
+    <div className="card-unit" key={index}>
+      <div
+        className="card"
+        onClick={e => {
+          e.preventDefault()
+          send(`HOLD_TOGGLE_${index + 1}`)
+        }}
+      >
+        {item}
+      </div>
+      {state.value !== "score" && (
+        <button
+          onClick={e => {
+            e.preventDefault()
+            send(`HOLD_TOGGLE_${index + 1}`)
+          }}
+        >
+          {state.context.holds[index] ? "Held" : "Hold"}
+        </button>
+      )}
+    </div>
+  )
   return (
     <Layout>
       <SEO title="Video Poker" />
-      <p>Something</p>
-      {state.value === "active" &&
-        state.context.hand.map((item, index) => (
-          <div className="card-unit" key={index}>
-            <div
-              className="card"
-              onClick={e => {
-                e.preventDefault()
-                send(`HOLD_TOGGLE_${index + 1}`)
-              }}
-            >
-              {item}
-            </div>
-            <button
-              onClick={e => {
-                e.preventDefault()
-                send(`HOLD_TOGGLE_${index + 1}`)
-              }}
-            >
-              {state.context.holds[index] ? "Held" : "Hold"}
-            </button>
-          </div>
-        ))}
+      {state.value === "active" && state.context.hand.map(mapCards)}
+      {state.value === "score" && state.context.final_cards.map(mapCards)}
       {state.value === "score" && (
         <pre>{JSON.stringify(state.context.result, null, 2)}</pre>
       )}
@@ -62,7 +64,6 @@ const GamePage = () => {
           SCORE
         </button>
       )}
-
       <h3>{state.value}</h3>
       <pre>{JSON.stringify(state.context, null, 2)}</pre>
     </Layout>
