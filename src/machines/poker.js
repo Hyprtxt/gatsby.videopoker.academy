@@ -1,6 +1,7 @@
 import { Machine, assign } from "xstate"
 
-const API_HOST = "http://localhost:1337"
+const GATSBY_API_URL = process.env.GATSBY_API_URL || "http://localhost:1337"
+// console.log("GATSBY_API_URL", GATSBY_API_URL)
 
 const holdToggle = hold_index =>
   assign({
@@ -19,13 +20,13 @@ const holdCard = hold_index =>
   })
 
 const fetchGame = () =>
-  fetch(`${API_HOST}/play`, {
+  fetch(`${GATSBY_API_URL}/play`, {
     method: "POST",
   }).then(response => response.json())
 
 const fetchResults = (game_id, data) => {
-  // console.log("Doing a fetch", `${API_HOST}/draw/${game_id}`)
-  return fetch(`${API_HOST}/draw/${game_id}`, {
+  // console.log("Doing a fetch", `${GATSBY_API_URL}/draw/${game_id}`)
+  return fetch(`${GATSBY_API_URL}/draw/${game_id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

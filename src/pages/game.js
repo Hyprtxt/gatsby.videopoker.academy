@@ -1,8 +1,8 @@
 import React from "react"
 // import { Link } from "gatsby"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
-import pokerMachine from "../machines/poker"
+import Layout from "src/components/layout"
+import SEO from "src/components/seo"
+import pokerMachine from "src/machines/poker"
 import { useMachine } from "@xstate/react"
 
 // const Card = ({ item, index, send, buttonText }) => {

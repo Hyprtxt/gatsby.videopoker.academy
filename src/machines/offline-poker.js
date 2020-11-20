@@ -1,5 +1,5 @@
 import { Machine, assign } from "xstate"
-import Poker from "../poker"
+import Poker from "src/poker"
 
 const suits = ["♦", "♣", "♥", "♠"],
   values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K"],
