@@ -1,17 +1,22 @@
 import React, { useContext } from "react"
+import { store } from "src/store"
 // import { Link } from "gatsby"
 // import Layout from "src/components/layout"
 import SEO from "src/components/seo"
 import pokerMachineFactory from "src/machines/poker"
 import { useMachine } from "@xstate/react"
-import ReactXStateContext from "src/ReactXStateContext"
 
 const Card = ({ index, state, handleClick, children }) => {
   // console.log(children[0], children[1])
   const held = state.context.holds[index]
   return (
     <div className={`card-unit key-${index} ${held ? "hold" : ""}`}>
-      <div className="card" onClick={handleClick}>
+      <div
+        className="card"
+        onClick={handleClick}
+        role="button"
+        tabIndex={index}
+      >
         <span className={`value`}>{children[1]}</span>
         <span className={`suit suit-${children[0]}`}>{children[0]}</span>
       </div>
@@ -25,8 +30,8 @@ const Card = ({ index, state, handleClick, children }) => {
 }
 
 const GamePage = () => {
-  const sessionMachine = useContext(ReactXStateContext)
-  const { state, send } = sessionMachine
+  const sessionMachine = useContext(store)
+  const { state } = sessionMachine
   let userID = state.context.user !== null ? state.context.user.id : 1
   const [gameState, gameSend] = useMachine(pokerMachineFactory(userID))
   const mapCards = (item, index) => {
@@ -79,7 +84,7 @@ const GamePage = () => {
         </button>
       )}
       <h3>{gameState.value}</h3>
-      <pre>{JSON.stringify(gameState.context, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(gameState.context, null, 2)}</pre> */}
     </>
   )
 }

@@ -1,21 +1,23 @@
 import React, { useContext } from "react"
-import ReactXStateContext from "src/ReactXStateContext"
-import { Link } from "gatsby"
-import Layout from "src/components/layout"
+import { store } from "src/store"
 import SEO from "src/components/seo"
+import { navigate } from "gatsby"
 
 const Logout = () => {
-  const sessionMachine = useContext(ReactXStateContext)
+  const sessionMachine = useContext(store)
   const { state, send } = sessionMachine
   window.localStorage.clear()
+  console.log("sending LOGOUT", state.value)
   send("LOGOUT")
+  setTimeout(() => {
+    navigate("/")
+  }, 1500)
   return (
-    <Layout>
+    <>
       <SEO title="Logout" />
       <h1>Goodbye!</h1>
       <p>See you next time.</p>
-      <Link to="/">Go back to the homepage</Link>
-    </Layout>
+    </>
   )
 }
 

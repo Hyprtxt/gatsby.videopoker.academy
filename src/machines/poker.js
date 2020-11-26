@@ -1,5 +1,4 @@
 import { Machine, assign } from "xstate"
-import qs from "qs"
 
 const GATSBY_API_URL = process.env.GATSBY_API_URL || "http://localhost:1337"
 // console.log("GATSBY_API_URL", GATSBY_API_URL)

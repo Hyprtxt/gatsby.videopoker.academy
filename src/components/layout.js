@@ -6,44 +6,20 @@
  */
 
 import React from "react"
-import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
-import ReactXStateContext from "src/ReactXStateContext"
-// import sessionMachine from "src/machines/session"
-import { useMachine } from "@xstate/react"
-import { Machine, interpret } from "xstate"
+// import PropTypes from "prop-types"
 
 import Header from "./header"
 import "./layout.sass"
-
-class Layout extends React.Component {
-  constructor(props) {
-    console.log(props, "HERE")
-    super(props)
-    this.children = props.children
-  }
-  static contextType = ReactXStateContext
-  render() {
-    const { children, context } = this
-    const { state, send } = context
-    let user = "nobody"
-    if (state.value === "active") {
-      user = state.context.user.username
-    }
-    return (
-      <>
-        <Header siteTitle={`VideoPoker.Academy`} user={user} />
-        {/* <pre>{JSON.stringify(context.value, null, 2)}</pre> */}
-        <main>{children}</main>
-        {/* <pre>{JSON.stringify(state.value, null, 2)}</pre> */}
-        {/* <pre>{JSON.stringify(state.context.user.id, null, 2)}</pre> */}
-      </>
-    )
-  }
+const Layout = () => {
+  return (
+    <>
+      <Header siteTitle={`VideoPoker.Academy`} />
+    </>
+  )
 }
 
-Layout.propTypes = {
-  children: PropTypes.node.isRequired,
-}
+// Layout.propTypes = {
+//   children: PropTypes.node.isRequired,
+// }
 
 export default Layout
