@@ -1,4 +1,5 @@
 import { Machine, assign } from "xstate"
+import qs from "qs"
 
 const GATSBY_API_URL = process.env.GATSBY_API_URL || "http://localhost:1337"
 // console.log("GATSBY_API_URL", GATSBY_API_URL)
@@ -19,10 +20,20 @@ const holdCard = hold_index =>
       ),
   })
 
-const fetchGame = () =>
+const fetchGame = user_id =>
   fetch(`${GATSBY_API_URL}/play`, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      User: user_id,
+    }),
   }).then(response => response.json())
+// .then(response => {
+//   console.log("FETCH", response.json())
+//   return response.json()
+// })
 
 const fetchResults = (game_id, data) => {
   // console.log("Doing a fetch", `${GATSBY_API_URL}/draw/${game_id}`)
@@ -34,11 +45,11 @@ const fetchResults = (game_id, data) => {
     body: JSON.stringify(data),
   }).then(response => response.json())
 }
-
-const pokerMachine = () =>
+const pokerMachineFactory = user_id =>
   Machine({
     initial: "idle",
     context: {
+      user_id,
       game_id: null,
       hand: null,
       draw: null,
@@ -57,14 +68,17 @@ const pokerMachine = () =>
       loadingGame: {
         invoke: {
           id: "getPlay",
-          src: (context, event) => fetchGame(),
+          src: (context, event) => fetchGame(context.user_id),
           onDone: {
             target: "active",
             actions: assign({
               draw: null,
               final_cards: null,
               hand: (context, event) => event.data.Hand,
-              game_id: (context, event) => event.data.id,
+              game_id: (context, event) => {
+                console.log(event.data)
+                return event.data.id
+              },
             }),
           },
           onError: {
@@ -154,4 +168,4 @@ const pokerMachine = () =>
     },
   })
 
-export default pokerMachine
+export default pokerMachineFactory

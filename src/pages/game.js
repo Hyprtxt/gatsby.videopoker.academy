@@ -1,9 +1,10 @@
-import React from "react"
+import React, { useContext } from "react"
 // import { Link } from "gatsby"
 // import Layout from "src/components/layout"
 import SEO from "src/components/seo"
-import pokerMachine from "src/machines/poker"
+import pokerMachineFactory from "src/machines/poker"
 import { useMachine } from "@xstate/react"
+import ReactXStateContext from "src/ReactXStateContext"
 
 const Card = ({ index, state, handleClick, children }) => {
   // console.log(children[0], children[1])
@@ -24,56 +25,63 @@ const Card = ({ index, state, handleClick, children }) => {
 }
 
 const GamePage = () => {
-  const [state, send] = useMachine(pokerMachine)
+  const sessionMacine = useContext(ReactXStateContext)
+  const { state, send } = sessionMacine
+  // console.log("sessionMacine", state.context.user.id)
+  const [gameState, gameSend] = useMachine(
+    pokerMachineFactory(state.context.user.id)
+  )
   const mapCards = (item, index) => {
     return (
       <Card
         key={index}
         index={index}
-        state={state}
+        state={gameState}
         handleClick={e => {
           e.preventDefault()
-          send(`HOLD_TOGGLE_${index + 1}`)
+          gameSend(`HOLD_TOGGLE_${index + 1}`)
         }}
       >
         {item}
       </Card>
     )
   }
+
   return (
     <>
       <SEO title="Video Poker" />
-      {state.value === "active" && state.context.hand.map(mapCards)}
-      {state.value === "score" && state.context.final_cards.map(mapCards)}
-      {state.value === "score" && [
+      {gameState.value === "active" && gameState.context.hand.map(mapCards)}
+      {gameState.value === "score" &&
+        gameState.context.final_cards.map(mapCards)}
+      {gameState.value === "score" && [
         <div className="clearfix" />,
-        <pre>{JSON.stringify(state.context.result, null, 2)}</pre>,
+        <pre>{JSON.stringify(gameState.context.result, null, 2)}</pre>,
       ]}
       {/* <div className="clearfix"></div> */}
-      {(state.value === "idle" || state.value === "score") && (
+      {(gameState.value === "idle" || gameState.value === "score") && (
         <button
           className="btn btn-primary"
           onClick={e => {
             e.preventDefault()
-            send("START")
+            gameSend("START")
           }}
         >
           START
         </button>
       )}
-      {state.value === "active" && (
+      {gameState.value === "active" && (
         <button
           className="btn btn-primary"
           onClick={e => {
             e.preventDefault()
-            send("SCORE")
+            gameSend("SCORE")
           }}
         >
           SCORE
         </button>
       )}
-      <h3>{state.value}</h3>
-      {/* <pre>{JSON.stringify(state.context, null, 2)}</pre> */}
+      <h3>{gameState.value}</h3>
+      <pre>{JSON.stringify(gameState.context, null, 2)}</pre>
     </>
   )
 }
