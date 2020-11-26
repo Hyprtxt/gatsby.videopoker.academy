@@ -42,6 +42,7 @@ const Layout = props => {
     <>
       <Header siteTitle={data.site.siteMetadata?.title || `Title`} />
       <main>{children}</main>
+      Shell
       {/* <pre>{JSON.stringify(state.value, null, 2)}</pre>
       <pre>{JSON.stringify(state.context, null, 2)}</pre> */}
       <footer

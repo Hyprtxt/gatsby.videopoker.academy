@@ -6,11 +6,14 @@ import pokerMachine from "src/machines/poker"
 import { useMachine } from "@xstate/react"
 
 const Card = ({ index, state, handleClick, children }) => {
+  console.log(children[0], children[1])
   const held = state.context.holds[index]
+
   return (
     <div className={`card-unit key-${index} ${held ? "hold" : ""}`}>
       <div className="card" onClick={handleClick}>
-        {children}
+        <span className={`value`}>{children[1]}</span>
+        <span className={`suit suit-${children[0]}`}>{children[0]}</span>
       </div>
       {state.value !== "score" && (
         <button onClick={handleClick}>{held ? "Held" : "Hold"}</button>
@@ -44,6 +47,7 @@ const GamePage = () => {
       {state.value === "score" && (
         <pre>{JSON.stringify(state.context.result, null, 2)}</pre>
       )}
+      {/* <div className="clearfix"></div> */}
       {(state.value === "idle" || state.value === "score") && (
         <button
           onClick={e => {
