@@ -37,13 +37,6 @@ class Layout extends React.Component {
         <main>{children}</main>
         {/* <pre>{JSON.stringify(state.value, null, 2)}</pre> */}
         {/* <pre>{JSON.stringify(state.context.user.id, null, 2)}</pre> */}
-        <footer
-          style={{
-            marginTop: `2rem`,
-          }}
-        >
-          © {new Date().getFullYear()}, built by Taylor
-        </footer>
       </>
     )
   }
