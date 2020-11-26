@@ -111,7 +111,7 @@ const SessionContext = ({ children }) => {
   const [state, send] = useMachine(createUserSessionMachine(null, token, user))
   // console.log("wrapROOT", token, user)
   return (
-    <ReactXStateContext.Provider value={state}>
+    <ReactXStateContext.Provider value={{ state, send }}>
       {children}
     </ReactXStateContext.Provider>
   )

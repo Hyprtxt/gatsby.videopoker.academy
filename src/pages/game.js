@@ -8,7 +8,6 @@ import { useMachine } from "@xstate/react"
 const Card = ({ index, state, handleClick, children }) => {
   // console.log(children[0], children[1])
   const held = state.context.holds[index]
-
   return (
     <div className={`card-unit key-${index} ${held ? "hold" : ""}`}>
       <div className="card" onClick={handleClick}>
@@ -46,9 +45,10 @@ const GamePage = () => {
       <SEO title="Video Poker" />
       {state.value === "active" && state.context.hand.map(mapCards)}
       {state.value === "score" && state.context.final_cards.map(mapCards)}
-      {state.value === "score" && (
-        <pre>{JSON.stringify(state.context.result, null, 2)}</pre>
-      )}
+      {state.value === "score" && [
+        <div className="clearfix" />,
+        <pre>{JSON.stringify(state.context.result, null, 2)}</pre>,
+      ]}
       {/* <div className="clearfix"></div> */}
       {(state.value === "idle" || state.value === "score") && (
         <button
