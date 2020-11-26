@@ -8,40 +8,42 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { useStaticQuery, graphql } from "gatsby"
-
+import ReactXStateContext from "src/ReactXStateContext"
 // import sessionMachine from "src/machines/session"
 import { useMachine } from "@xstate/react"
 
 import Header from "./header"
 import "./layout.sass"
 
-const Layout = props => {
-  const { children } = props
-  console.log(props, "HERE")
-  const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title
-        }
-      }
+class Layout extends React.Component {
+  constructor(props) {
+    console.log(props, "HERE")
+    super(props)
+    this.children = props.children
+  }
+  static contextType = ReactXStateContext
+  render() {
+    let user = "nobody"
+    if (this.context.value === "active") {
+      user = this.context.context.user.username
     }
-  `)
-  return (
-    <>
-      <Header siteTitle={data.site.siteMetadata?.title || `Title`} />
-      <main>{children}</main>
-      {/* <pre>{JSON.stringify(state.value, null, 2)}</pre>
-      <pre>{JSON.stringify(state.context, null, 2)}</pre> */}
-      <footer
-        style={{
-          marginTop: `2rem`,
-        }}
-      >
-        © {new Date().getFullYear()}, built by Taylor
-      </footer>
-    </>
-  )
+    return (
+      <>
+        <Header siteTitle={`VideoPoker.Academy`} user={user} />
+        <pre>{JSON.stringify(this.context.value, null, 2)}</pre>
+        <main>{this.children}</main>
+        {/* <pre>{JSON.stringify(state.value, null, 2)}</pre>
+        <pre>{JSON.stringify(state.context, null, 2)}</pre> */}
+        <footer
+          style={{
+            marginTop: `2rem`,
+          }}
+        >
+          © {new Date().getFullYear()}, built by Taylor
+        </footer>
+      </>
+    )
+  }
 }
 
 Layout.propTypes = {
