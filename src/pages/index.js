@@ -34,13 +34,13 @@ const Toggler = () => {
 }
 
 const IndexPage = () => (
-  <Layout>
+  <>
     <SEO title="Home" />
     <h1>Hi people</h1>
     <p>This is a website.</p>
     <Link to="/game">Play the game</Link>
     <Toggler />
-  </Layout>
+  </>
 )
 
 export default IndexPage
