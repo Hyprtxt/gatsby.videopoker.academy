@@ -19,6 +19,13 @@ exports.onPreRouteUpdate = ({ location, prevLocation }) => {
 
 exports.onClientEntry = () => {
   console.log("We've started!")
+  let token, user
+  if (window.localStorage.getItem("token")) {
+    console.log("We are logged in")
+    token = window.localStorage.getItem("token")
+    user = JSON.parse(window.localStorage.getItem("user"))
+  }
+  console.log(token, user)
 }
 
 const toggleMachine = Machine({

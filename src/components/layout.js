@@ -27,22 +27,10 @@ const Layout = props => {
       }
     }
   `)
-
-  {
-    /* <div
-  style={{
-    margin: `0 auto`,
-    maxWidth: 960,
-    padding: `0 1.0875rem 1.45rem`,
-  }}
-></div> */
-  }
-
   return (
     <>
       <Header siteTitle={data.site.siteMetadata?.title || `Title`} />
       <main>{children}</main>
-      Shell
       {/* <pre>{JSON.stringify(state.value, null, 2)}</pre>
       <pre>{JSON.stringify(state.context, null, 2)}</pre> */}
       <footer
