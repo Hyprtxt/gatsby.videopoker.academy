@@ -13,7 +13,7 @@ import { useStaticQuery, graphql } from "gatsby"
 import { useMachine } from "@xstate/react"
 
 import Header from "./header"
-import "./layout.css"
+import "./layout.sass"
 
 const Layout = props => {
   const { children } = props
