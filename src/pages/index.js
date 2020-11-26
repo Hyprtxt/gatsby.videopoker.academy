@@ -12,12 +12,12 @@ const IndexPage = () => (
     <p>This is a website, you may:</p>
     <ul>
       <li>
-        <Link to="https://api.videopoker.academy/connect/google">
+        <a href="https://api.videopoker.academy/connect/google">
           Login with Google
-        </Link>
+        </a>
       </li>
       <li>
-        <Link to="/game">Play the game</Link>
+        <Link to="/game/">Play the game</Link>
       </li>
     </ul>
     <div className="clearfix"></div>

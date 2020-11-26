@@ -25,12 +25,10 @@ const Card = ({ index, state, handleClick, children }) => {
 }
 
 const GamePage = () => {
-  const sessionMacine = useContext(ReactXStateContext)
-  const { state, send } = sessionMacine
-  // console.log("sessionMacine", state.context.user.id)
-  const [gameState, gameSend] = useMachine(
-    pokerMachineFactory(state.context.user.id)
-  )
+  const sessionMachine = useContext(ReactXStateContext)
+  const { state, send } = sessionMachine
+  let userID = state.context.user !== null ? state.context.user.id : 1
+  const [gameState, gameSend] = useMachine(pokerMachineFactory(userID))
   const mapCards = (item, index) => {
     return (
       <Card

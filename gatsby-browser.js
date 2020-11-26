@@ -107,6 +107,8 @@ const SessionContext = ({ children }) => {
     console.log("We are logged in")
     token = window.localStorage.getItem("token")
     user = JSON.parse(window.localStorage.getItem("user"))
+  } else {
+    console.log("We are NOT logged in")
   }
   const [state, send] = useMachine(createUserSessionMachine(null, token, user))
   // console.log("wrapROOT", token, user)

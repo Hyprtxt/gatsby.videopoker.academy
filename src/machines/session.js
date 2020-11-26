@@ -24,6 +24,9 @@ const createSessionMachine = loginURL => {
     },
     states: {
       // load from localStorage?
+      idle: {
+        on: { LOGIN: "tryLogin" },
+      },
       inactive: {
         always: "tryLogin",
       },
@@ -47,7 +50,14 @@ const createSessionMachine = loginURL => {
         },
       },
       active: {
-        on: { LOGOUT: "inactive" },
+        on: { LOGOUT: "doLogout" },
+      },
+      doLogout: {
+        target: "idle",
+        actions: assign({
+          user: null,
+          jwt: null,
+        }),
       },
       failure: {},
     },
