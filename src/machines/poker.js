@@ -19,36 +19,35 @@ const holdCard = hold_index =>
       ),
   })
 
-const fetchGame = user_id =>
-  fetch(`${GATSBY_API_URL}/play`, {
-    method: "POST",
+const fetchGame = token => {
+  console.log("token", token)
+  return fetch(`${GATSBY_API_URL}/play`, {
     headers: {
-      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({
-      User: user_id,
-    }),
   }).then(response => response.json())
-// .then(response => {
-//   console.log("FETCH", response.json())
-//   return response.json()
-// })
-
-const fetchResults = (game_id, data) => {
+  // .then(response => {
+  //   console.log("FETCH", response.json())
+  //   return response.json()
+  // })
+}
+const fetchResults = context => {
+  const { game_id, token, holds } = context
   // console.log("Doing a fetch", `${GATSBY_API_URL}/draw/${game_id}`)
   return fetch(`${GATSBY_API_URL}/draw/${game_id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ Holds: holds }),
   }).then(response => response.json())
 }
-const pokerMachineFactory = user_id =>
+const pokerMachineFactory = token =>
   Machine({
     initial: "idle",
     context: {
-      user_id,
+      token,
       credits: "?",
       game_id: null,
       hand: null,
@@ -68,16 +67,17 @@ const pokerMachineFactory = user_id =>
       loadingGame: {
         invoke: {
           id: "getPlay",
-          src: (context, event) => fetchGame(context.user_id),
+          src: (context, event) => fetchGame(context.token),
           onDone: {
             target: "active",
             actions: assign({
+              result: null,
               draw: null,
               final_cards: null,
               hand: (context, event) => event.data.Hand,
               credits: (context, event) => event.data.User.Credits,
               game_id: (context, event) => {
-                console.log(event.data)
+                console.log("getPlay", event.data)
                 return event.data.id
               },
             }),
@@ -132,8 +132,7 @@ const pokerMachineFactory = user_id =>
       loadingResults: {
         invoke: {
           id: "getResult",
-          src: (context, event) =>
-            fetchResults(context.game_id, { Holds: context.holds }),
+          src: (context, event) => fetchResults(context),
           onDone: {
             target: "draw",
             actions: assign({

@@ -14,11 +14,9 @@ const GamePage = () => {
   const sessionMachine = useContext(store)
   const { state, send } = sessionMachine
   // console.log("GamePage", state.context)
-  let userID = 1
-  if (state !== undefined) {
-    userID = state.context.user !== null ? state.context.user.id : 1
-  }
-  const [gameState, gameSend] = useMachine(pokerMachineFactory(userID))
+  const [gameState, gameSend] = useMachine(
+    pokerMachineFactory(state.context.token)
+  )
   const [fetchState] = useMachine(
     fetchMachineFactory(`${GATSBY_API_URL}/users/me`, {
       headers: {
@@ -38,7 +36,7 @@ const GamePage = () => {
       </p>
       <PokerUI {...{ gameState, gameSend }} />
       <h3>{gameState.value}</h3>
-      {/* <pre>{JSON.stringify(gameState.context, null, 2)}</pre> */}
+      <pre>{JSON.stringify(gameState.context, null, 2)}</pre>
     </>
   )
 }
