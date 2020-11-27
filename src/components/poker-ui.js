@@ -50,6 +50,9 @@ const PokerUI = ({ gameState, gameSend }) => {
   }
   return (
     <>
+      {gameState.context.credits !== "?" ? (
+        <p>{`Credits: ${gameState.context.credits}`}</p>
+      ) : null}
       {(gameState.value === "active" ||
         gameState.value === "loadingResults" ||
         gameState.value === "score") && (

@@ -23,7 +23,6 @@ const GamePage = () => {
   return (
     <>
       <SEO title="Offline Video Poker" />
-      <p>{`Credits: ${gameState.context.credits}`}</p>
       <PokerUI {...{ gameState, gameSend }} />
       {/* <h3>{gameState.value}</h3> */}
       {/* <pre>{JSON.stringify(gameState.context, null, 2)}</pre> */}
