@@ -84,12 +84,11 @@ const sessionMachineFactory = (loginURL, token, user) =>
                   localStorage.setItem("token", event.data.jwt)
                 },
                 assign({
-                  user: (context, event) =>
-                    //event.data.user,
-                    {
-                      console.log("assignTryOAuth", event)
-                      return event.data.user
-                    },
+                  user: (context, event) => event.data.user,
+                  // {
+                  //   console.log("assignTryOAuth", event)
+                  //   return event.data.user
+                  // },
                   token: (context, event) => event.data.jwt,
                 }),
               ],
@@ -99,16 +98,7 @@ const sessionMachineFactory = (loginURL, token, user) =>
             },
           },
         },
-        sessionActive: {
-          on: {
-            LOGOUT: {
-              target: "inactive",
-              actions: [],
-            },
-          },
-        },
         active: {
-          // Has a token, need to load from localstorage?
           on: {
             LOGOUT: {
               target: "inactive",
@@ -119,6 +109,20 @@ const sessionMachineFactory = (loginURL, token, user) =>
                 error: null,
               }),
             },
+            // CREDIT_CHANGE: {
+            //   target: "active",
+            //   actions: assign({
+            //     credits: (context, event) => {
+            //       // context.credits + event.change,
+            //       console.log(
+            //         "CREDIT_CHANGE",
+            //         event,
+            //         context.credits + event.change
+            //       )
+            //       return context.credits + event.change
+            //     },
+            //   }),
+            // },
           },
         },
         loginFailure: {},

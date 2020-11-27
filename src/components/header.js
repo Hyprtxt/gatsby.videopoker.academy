@@ -19,6 +19,7 @@ const Header = ({ siteTitle }) => {
         </Link>
         <p>{`User: ${user}`}</p>
         <pre>{JSON.stringify(state.value, null, 2)}</pre>
+        {/* <pre>{JSON.stringify(state.context.user.Credits, null, 2)}</pre> */}
       </div>
     </header>
   )

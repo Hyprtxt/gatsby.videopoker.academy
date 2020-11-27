@@ -42,94 +42,123 @@ const holdCard = hold_index =>
       ),
   })
 
-const pokerMachine = () =>
-  Machine({
-    initial: "idle",
-    context: {
-      // mode: "offline",
-      deck: getNewCards(),
-      hand: null,
-      final_cards: null,
-      holds: [false, false, false, false, false],
-      result: null,
-    },
-    states: {
-      idle: {
-        on: {
-          START: {
-            target: "active",
-            actions: assign({
-              hand: (context, event) => {
-                // console.log("DRAWCARDS")
-                return [...context.deck.splice(0, 5)]
-              },
-            }),
+const offlinePokerMachineFactory = credits =>
+  Machine(
+    {
+      initial: "idle",
+      context: {
+        // mode: "offline",
+        deck: getNewCards(),
+        hand: null,
+        final_cards: null,
+        holds: [false, false, false, false, false],
+        result: null,
+        credits,
+      },
+      states: {
+        idle: {
+          on: {
+            START: {
+              target: "active",
+              actions: "doStartGame",
+            },
           },
         },
-      },
-      active: {
-        on: {
-          HOLD_TOGGLE_1: {
-            actions: holdToggle(0),
-          },
-          HOLD_TOGGLE_2: {
-            actions: holdToggle(1),
-          },
-          HOLD_TOGGLE_3: {
-            actions: holdToggle(2),
-          },
-          HOLD_TOGGLE_4: {
-            actions: holdToggle(3),
-          },
-          HOLD_TOGGLE_5: {
-            actions: holdToggle(4),
-          },
-          HOLD_1: {
-            actions: holdCard(0),
-          },
-          HOLD_2: {
-            actions: holdCard(1),
-          },
-          HOLD_3: {
-            actions: holdCard(2),
-          },
-          HOLD_4: {
-            actions: holdCard(3),
-          },
-          HOLD_5: {
-            actions: holdCard(4),
-          },
-          HOLD_ALL: {
-            actions: assign({
-              holds: [true, true, true, true, true],
-            }),
-          },
-          SCORE: {
-            target: "draw",
-            actions: assign({
-              final_cards: (context, event) => {
-                let number_drawn = 0
-                const { hand, deck } = context
-                return context.holds.map((hold, index) =>
-                  hold ? hand[index] : deck.splice(0, 1)[0]
-                )
-              },
-            }),
+        active: {
+          on: {
+            HOLD_TOGGLE_1: {
+              actions: holdToggle(0),
+            },
+            HOLD_TOGGLE_2: {
+              actions: holdToggle(1),
+            },
+            HOLD_TOGGLE_3: {
+              actions: holdToggle(2),
+            },
+            HOLD_TOGGLE_4: {
+              actions: holdToggle(3),
+            },
+            HOLD_TOGGLE_5: {
+              actions: holdToggle(4),
+            },
+            HOLD_1: {
+              actions: holdCard(0),
+            },
+            HOLD_2: {
+              actions: holdCard(1),
+            },
+            HOLD_3: {
+              actions: holdCard(2),
+            },
+            HOLD_4: {
+              actions: holdCard(3),
+            },
+            HOLD_5: {
+              actions: holdCard(4),
+            },
+            HOLD_ALL: {
+              actions: assign({
+                holds: [true, true, true, true, true],
+              }),
+            },
+            SCORE: {
+              target: "draw",
+              actions: assign({
+                final_cards: (context, event) => {
+                  let number_drawn = 0
+                  const { hand, deck } = context
+                  return context.holds.map((hold, index) =>
+                    hold ? hand[index] : deck.splice(0, 1)[0]
+                  )
+                },
+              }),
+            },
           },
         },
-      },
-      draw: {
-        on: {
-          "": {
+        draw: {
+          always: {
             target: "score",
             actions: assign({
+              deck: () => getNewCards(),
+              hand: null,
+              holds: [false, false, false, false, false],
+              result: null,
+              credits: (context, event) => {
+                const final =
+                  context.credits + Poker.Score(context.final_cards).win
+                window.localStorage.setItem("credits", final)
+                return final
+              },
               result: (context, event) => Poker.Score(context.final_cards),
             }),
           },
         },
+        score: {
+          on: {
+            START: {
+              target: "active",
+              actions: "doStartGame",
+            },
+          },
+        },
       },
-      score: {},
     },
-  })
+    {
+      actions: {
+        doStartGame: assign({
+          final_cards: null,
+          credits: (context, event) => {
+            const final = context.credits - 5
+            window.localStorage.setItem("credits", final)
+            return final
+          },
+          hand: (context, event) => {
+            // console.log("DRAWCARDS")
+            return [...context.deck.splice(0, 5)]
+          },
+        }),
+      },
+    }
+  )
 
-export default pokerMachine
+export default offlinePokerMachineFactory

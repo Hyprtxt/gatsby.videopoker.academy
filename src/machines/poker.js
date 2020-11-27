@@ -49,6 +49,7 @@ const pokerMachineFactory = user_id =>
     initial: "idle",
     context: {
       user_id,
+      credits: 0,
       game_id: null,
       hand: null,
       draw: null,
@@ -74,6 +75,7 @@ const pokerMachineFactory = user_id =>
               draw: null,
               final_cards: null,
               hand: (context, event) => event.data.Hand,
+              credits: (context, event) => event.data.User.Credits,
               game_id: (context, event) => {
                 console.log(event.data)
                 return event.data.id
@@ -137,6 +139,7 @@ const pokerMachineFactory = user_id =>
             actions: assign({
               draw: (context, event) => event.data.Draw,
               result: (context, event) => event.data.Result,
+              credits: (context, event) => event.data.User.Credits,
               final_cards: (context, event) => event.data.FinalCards,
             }),
           },
@@ -146,14 +149,12 @@ const pokerMachineFactory = user_id =>
         },
       },
       draw: {
-        on: {
-          "": {
-            target: "score",
-            actions: assign({
-              holds: [false, false, false, false, false],
-              // result: (context, event) => Poker.Score(context.final_cards),
-            }),
-          },
+        always: {
+          target: "score",
+          actions: assign({
+            holds: [false, false, false, false, false],
+            // result: (context, event) => Poker.Score(context.final_cards),
+          }),
         },
       },
       score: {

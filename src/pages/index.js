@@ -13,16 +13,24 @@ const IndexPage = () => {
       <h1>Hi people</h1>
       <p>This is a website, you may:</p>
       <ul>
+        <li>
+          <Link to="/offline">Play the game offline</Link>
+        </li>
         {state.value === "inactive" && (
+          <>
+            <li>P̶l̶a̶y̶ ̶t̶h̶e̶ ̶g̶a̶m̶e̶ ̶o̶n̶l̶i̶n̶e̶</li>
+            <li>
+              <a href="https://api.videopoker.academy/connect/google">
+                Join/Login
+              </a>
+            </li>
+          </>
+        )}
+        {state.value === "active" && (
           <li>
-            <a href="https://api.videopoker.academy/connect/google">
-              Login with Google
-            </a>
+            <Link to="/game">Play the game online</Link>
           </li>
         )}
-        <li>
-          <Link to="/game">Play the game</Link>
-        </li>
         <li>
           <Link to="/page-2">Visit Page 2</Link>
         </li>
