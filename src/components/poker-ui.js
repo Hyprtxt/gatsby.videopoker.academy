@@ -43,13 +43,13 @@ const PokerUI = ({ gameState, gameSend }) => {
       </Card>
     )
   }
+  const eventContext = { active: "hand", score: "final_cards" }
   return (
     <>
-      {gameState.value === "active" && (
-        <div>{gameState.context.hand.map(mapCards)}</div>
-      )}
-      {gameState.value === "score" && (
-        <div>{gameState.context.final_cards.map(mapCards)}</div>
+      {(gameState.value === "active" || gameState.value === "score") && (
+        <div>
+          {gameState.context[eventContext[gameState.value]].map(mapCards)}
+        </div>
       )}
       {gameState.value === "score" && [
         <div className="clearfix" />,
