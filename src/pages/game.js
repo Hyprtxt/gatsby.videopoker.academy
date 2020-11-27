@@ -7,23 +7,28 @@ import pokerMachineFactory from "src/machines/poker"
 import { useMachine } from "@xstate/react"
 import PokerUI from "src/components/poker-ui"
 import fetchMachineFactory from "src/machines/fetch"
+import useIsClient from "src/hooks/use-is-client"
 
 const GATSBY_API_URL = process.env.GATSBY_API_URL || "http://localhost:1337"
 
 const GamePage = () => {
+  const { isClient, key } = useIsClient()
   const sessionMachine = useContext(store)
   const { state, send } = sessionMachine
   // console.log("GamePage", state.context)
-  const [gameState, gameSend] = useMachine(
-    pokerMachineFactory(state.context.token)
-  )
+  let token = ""
+  if (state !== undefined) {
+    token = state.context.token
+  }
+  const [gameState, gameSend] = useMachine(pokerMachineFactory(token))
   const [fetchState] = useMachine(
     fetchMachineFactory(`${GATSBY_API_URL}/users/me`, {
       headers: {
-        Authorization: `Bearer ${state.context.token}`,
+        Authorization: `Bearer ${token}`,
       },
     })
   )
+  if (!isClient) return null
   return (
     <>
       <SEO title="Video Poker" />
@@ -36,7 +41,7 @@ const GamePage = () => {
       </p>
       <PokerUI {...{ gameState, gameSend }} />
       <h3>{gameState.value}</h3>
-      <pre>{JSON.stringify(gameState.context, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(gameState.context, null, 2)}</pre> */}
     </>
   )
 }
