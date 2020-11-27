@@ -26,7 +26,7 @@ const IndexPage = () => {
 
           {state.value === "inactive" && (
             <li>
-              <a href="//api.videopoker.academy/connect/google">Join/Login</a>
+              <a href="//localhost:1337/connect/google">Join/Login</a>
             </li>
           )}
 

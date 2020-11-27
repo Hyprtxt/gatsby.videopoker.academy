@@ -19,16 +19,29 @@
     user-select: none
     position: relative
     outline: none
-    .value
-      position: absolute
-      left: 1rem
-      top: 1rem
-      line-height: 3rem
-    .suit
-      font-size: 8rem
-      line-height: 20vw
     .suit-♦, .suit-♥
       color: red
+
+@include media-breakpoint-down(xs)
+  .card-unit .card 
+    font-size: 1.2rem
+    .value, .suit
+      display: none
+
+
+@include media-breakpoint-up(sm) 
+  .card-unit .card
+    .info
+      display: none
+    .value
+      position: absolute
+      left: 1vw
+      top: 1vw
+      line-height: 3rem
+    .suit
+      font-size: 10vw
+      line-height: 20vw
+
 
 header a h1
   color: white

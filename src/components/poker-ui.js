@@ -11,6 +11,10 @@ const Card = ({ index, state, handleClick, children }) => {
         role="button"
         tabIndex={index}
       >
+        <span className={`info d-none-md`}>
+          {children[1]}
+          <span className={`suit-${children[0]}`}>{children[0]}</span>
+        </span>
         <span className={`value`}>{children[1]}</span>
         <span className={`suit suit-${children[0]}`}>{children[0]}</span>
       </div>
