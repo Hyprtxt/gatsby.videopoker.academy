@@ -8,16 +8,13 @@ const Logout = () => {
   const { isClient, key } = useIsClient()
   const sessionMachine = useContext(store)
   const { state, send } = sessionMachine
-  if (!isClient) return null
-  console.log(window)
-  if (window !== undefined) {
+  if (isClient) {
     window.localStorage.clear()
+    send("LOGOUT")
+    setTimeout(() => {
+      navigate("/")
+    }, 1500)
   }
-  console.log("sending LOGOUT", state.value)
-  send("LOGOUT")
-  setTimeout(() => {
-    navigate("/")
-  }, 1500)
   return (
     <>
       <SEO title="Logout" />

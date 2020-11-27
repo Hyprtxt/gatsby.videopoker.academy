@@ -16,19 +16,22 @@ const GamePage = () => {
   const sessionMachine = useContext(store)
   const { state, send } = sessionMachine
   // console.log("GamePage", state.context)
-  let token = ""
-  if (state !== undefined) {
+  let token = null
+  if (isClient) {
     token = state.context.token
   }
-  const [gameState, gameSend] = useMachine(pokerMachineFactory(token))
+  let [gameState, gameSend] = useMachine(pokerMachineFactory(token))
+  const auth = {
+    Authorization: `Bearer ${token}`,
+  }
+  const fetchOptions = token !== null ? { headers: auth } : {}
   const [fetchState] = useMachine(
-    fetchMachineFactory(`${GATSBY_API_URL}/users/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    fetchMachineFactory(`${GATSBY_API_URL}/users/me`, fetchOptions)
   )
-  if (!isClient) return null
+  if (!isClient) {
+    gameState = {}
+    gameState.value = "idle"
+  }
   return (
     <>
       <SEO title="Video Poker" />
@@ -39,8 +42,12 @@ const GamePage = () => {
             : "Credits: loading..."
           : null}
       </p>
+      {fetchState.value === "error" ? (
+        <p>{fetchState.context.error}, Do you have an account?</p>
+      ) : null}
       <PokerUI {...{ gameState, gameSend }} />
       <h3>{gameState.value}</h3>
+      {/* <pre>{JSON.stringify(fetchState.context, null, 2)}</pre> */}
       {/* <pre>{JSON.stringify(gameState.context, null, 2)}</pre> */}
     </>
   )

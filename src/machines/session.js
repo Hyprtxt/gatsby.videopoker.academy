@@ -1,39 +1,18 @@
 import { Machine, assign } from "xstate"
 
-const hasToken = (context, event) => {
-  console.log("hasToken", context.token, context.user)
-  return context.token !== null
-}
-const hasLoginURL = (context, event) => {
-  console.log("hasLoginURL", context.loginURL)
-  return context.loginURL !== null
-}
-
-const hasUser = (context, event) => context.user !== null
-
 const fetchStrapiLogin = loginURL => {
-  return (
-    fetch(loginURL)
-      .then(res => {
-        if (res.status !== 200) {
-          throw new Error(`Couldn't login to Strapi API. Status: ${res.status}`)
-        }
-        return res
-      })
-      .then(res => res.json())
-      // .then(res => {
-      //   const payload = res.json()
-      //   console.log("GOODSTUFF", res)
-      //   localStorage.setItem("user", JSON.stringify(payload.data.user))
-      //   localStorage.setItem("token", payload.data.jwt)
-      //   localStorage.removeItem("loginURL")
-      //   return payload
-      // })
-      .catch(err => {
-        console.log(err)
-        // setText("An error occurred, please see the developer console.")
-      })
-  )
+  return fetch(loginURL)
+    .then(res => {
+      if (res.status !== 200) {
+        throw new Error(`Couldn't login to Strapi API. Status: ${res.status}`)
+      }
+      return res
+    })
+    .then(res => res.json())
+    .catch(err => {
+      console.log(err)
+      // setText("An error occurred, please see the developer console.")
+    })
 }
 
 const sessionMachineFactory = (loginURL, token, user) =>
@@ -80,15 +59,12 @@ const sessionMachineFactory = (loginURL, token, user) =>
               target: "active",
               actions: [
                 (context, event) => {
-                  localStorage.setItem("user", JSON.stringify(event.data.user))
+                  console.log("STrapi Login", event)
+                  // localStorage.setItem("user", JSON.stringify(event.data.user))
                   localStorage.setItem("token", event.data.jwt)
                 },
                 assign({
-                  user: (context, event) => event.data.user,
-                  // {
-                  //   console.log("assignTryOAuth", event)
-                  //   return event.data.user
-                  // },
+                  // user: (context, event) => event.data.user,
                   token: (context, event) => event.data.jwt,
                 }),
               ],
@@ -109,20 +85,6 @@ const sessionMachineFactory = (loginURL, token, user) =>
                 error: null,
               }),
             },
-            // CREDIT_CHANGE: {
-            //   target: "active",
-            //   actions: assign({
-            //     credits: (context, event) => {
-            //       // context.credits + event.change,
-            //       console.log(
-            //         "CREDIT_CHANGE",
-            //         event,
-            //         context.credits + event.change
-            //       )
-            //       return context.credits + event.change
-            //     },
-            //   }),
-            // },
           },
         },
         loginFailure: {},
@@ -130,9 +92,9 @@ const sessionMachineFactory = (loginURL, token, user) =>
     },
     {
       guards: {
-        hasToken,
-        hasUser,
-        hasLoginURL,
+        hasToken: (context, event) => context.token !== null,
+        hasLoginURL: (context, event) => context.loginURL !== null,
+        hasUser: (context, event) => context.user !== null,
       },
     }
   )

@@ -9,16 +9,18 @@ const GATSBY_API_URL = process.env.GATSBY_API_URL || "http://localhost:1337"
 const Redirect = ({ providerName }) => {
   const { isClient, key } = useIsClient()
   const sessionMachine = useContext(store)
-  const { state, send } = sessionMachine
+  let { state, send } = sessionMachine
   const location = useLocation()
   const loginURL = `${GATSBY_API_URL}/auth/${providerName}/callback${location.search}`
-  if (!isClient) return null
-  // console.log("sending login event", loginURL)
-  send({ type: "LOGIN", loginURL: loginURL })
-  if (state.value === "active") {
-    setTimeout(() => {
-      navigate("/")
-    }, 500)
+  if (isClient) {
+    send({ type: "LOGIN", loginURL: loginURL })
+    if (state.value === "active") {
+      setTimeout(() => {
+        navigate("/")
+      }, 500)
+    }
+  } else {
+    state = { value: "inactive" }
   }
   return (
     <div className="p-5">

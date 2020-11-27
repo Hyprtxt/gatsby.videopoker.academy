@@ -38,15 +38,18 @@ const fetchMachineFactory = (url, options) =>
               }),
             },
             onError: {
-              target: "failure",
-              actions: (context, event) => {
-                console.log("BIG FAIL", context, event)
-              },
+              target: "error",
+              actions: [
+                assign({ error: (context, event) => event.data.message }),
+                (context, event) => {
+                  console.log("BIG FAIL", context, event)
+                },
+              ],
             },
           },
         },
         ready: {},
-        failure: {},
+        error: {},
       },
     },
     {
