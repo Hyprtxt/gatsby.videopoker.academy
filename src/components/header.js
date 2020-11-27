@@ -5,11 +5,14 @@ import PropTypes from "prop-types"
 
 const Header = ({ siteTitle }) => {
   const sessionMachine = useContext(store)
-  const { state } = sessionMachine
-  let user = "nobody"
-  if (state.value === "active") {
-    user = state.context.user.username
-    // user = state.context.user.Handle
+  const { state, send } = sessionMachine
+  let user = "unknown"
+  // console.log("HEADER", state)
+  if (state !== undefined) {
+    if (state.value === "active") {
+      user = state.context.user.username
+      // user = state.context.user.Handle
+    }
   }
   return (
     <header className="mb-3">
@@ -18,7 +21,7 @@ const Header = ({ siteTitle }) => {
           <h1>{siteTitle}</h1>
         </Link>
         <p>{`User: ${user}`}</p>
-        <pre>{JSON.stringify(state.value, null, 2)}</pre>
+        {/* <pre>{JSON.stringify(state.value, null, 2)}</pre> */}
         {/* <pre>{JSON.stringify(state.context.user.Credits, null, 2)}</pre> */}
       </div>
     </header>

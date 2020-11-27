@@ -49,7 +49,7 @@ const pokerMachineFactory = user_id =>
     initial: "idle",
     context: {
       user_id,
-      credits: 0,
+      credits: "?",
       game_id: null,
       hand: null,
       draw: null,

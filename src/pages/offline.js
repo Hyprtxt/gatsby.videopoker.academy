@@ -6,16 +6,20 @@ import SEO from "src/components/seo"
 import offlinePokerMachineFactory from "src/machines/offline-poker"
 import { useMachine } from "@xstate/react"
 import PokerUI from "src/components/poker-ui"
+import useIsClient from "src/hooks/use-is-client"
 
 const GamePage = () => {
   const sessionMachine = useContext(store)
   const { state, send } = sessionMachine
-  let userID = state.context.user !== null ? state.context.user.id : 1
-  const LoadedCredits = parseInt(window.localStorage.getItem("credits"))
+  const { isClient, key } = useIsClient()
+  let startCredits = 100
+  if (isClient) {
+    startCredits = window.localStorage.getItem("credits")
+  }
+  const LoadedCredits = parseInt(startCredits)
   const [gameState, gameSend] = useMachine(
     offlinePokerMachineFactory(LoadedCredits ? LoadedCredits : 100)
   )
-
   return (
     <>
       <SEO title="Offline Video Poker" />
