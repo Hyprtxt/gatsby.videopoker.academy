@@ -24,11 +24,11 @@ const IndexPage = () => {
         <p>This is a website, you may:</p>
         <ul>
           {state.value === "inactive" && <li>P̶l̶a̶y̶ ̶t̶h̶e̶ ̶g̶a̶m̶e̶ ̶o̶n̶l̶i̶n̶e̶</li>}
-          {state.value === "inactive" && [
+          {state.value === "inactive" && (
             <li>
               <Link to="/login">Join/Login with provider</Link>
-            </li>,
-          ]}
+            </li>
+          )}
           {state.value === "active" && (
             <li>
               <Link to="/game">Play this game online</Link>

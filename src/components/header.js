@@ -2,12 +2,15 @@ import React, { useContext } from "react"
 import { Link } from "gatsby"
 import { store } from "src/store"
 import PropTypes from "prop-types"
+import useIsClient from "src/hooks/use-is-client"
 
 const Header = ({ siteTitle }) => {
+  const { isClient, key } = useIsClient()
   const sessionMachine = useContext(store)
   const { state, send } = sessionMachine
   let user = "unknown"
-  // console.log("HEADER", state)
+  if (!isClient) return null
+  // console.log("HEADER", state.context)
   if (state !== undefined) {
     if (state.value === "active") {
       user = state.context.user.username

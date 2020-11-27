@@ -60,11 +60,11 @@ const sessionMachineFactory = (loginURL, token, user) =>
               actions: [
                 (context, event) => {
                   console.log("STrapi Login", event)
-                  // localStorage.setItem("user", JSON.stringify(event.data.user))
+                  localStorage.setItem("user", JSON.stringify(event.data.user))
                   localStorage.setItem("token", event.data.jwt)
                 },
                 assign({
-                  // user: (context, event) => event.data.user,
+                  user: (context, event) => event.data.user,
                   token: (context, event) => event.data.jwt,
                 }),
               ],

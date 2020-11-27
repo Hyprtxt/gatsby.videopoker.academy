@@ -13,7 +13,7 @@ const Logout = () => {
     send("LOGOUT")
     setTimeout(() => {
       navigate("/")
-    }, 1500)
+    }, 500)
   }
   return (
     <>
