@@ -20,7 +20,7 @@ const holdCard = hold_index =>
   })
 
 const fetchGame = token => {
-  console.log("token", token)
+  // console.log("token", token)
   return fetch(`${GATSBY_API_URL}/play`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -77,7 +77,7 @@ const pokerMachineFactory = token =>
               hand: (context, event) => event.data.Hand,
               credits: (context, event) => event.data.User.Credits,
               game_id: (context, event) => {
-                console.log("getPlay", event.data)
+                // console.log("getPlay", event.data)
                 return event.data.id
               },
             }),
@@ -90,7 +90,12 @@ const pokerMachineFactory = token =>
       active: {
         on: {
           HOLD_TOGGLE_1: {
-            actions: holdToggle(0),
+            actions: [
+              holdToggle(0),
+              (context, event) => {
+                console.log(event, "good")
+              },
+            ],
           },
           HOLD_TOGGLE_2: {
             actions: holdToggle(1),

@@ -11,27 +11,18 @@ import useIsClient from "src/hooks/use-is-client"
 
 const GATSBY_API_URL = process.env.GATSBY_API_URL || "http://localhost:1337"
 
-const GamePage = () => {
-  const { isClient, key } = useIsClient()
+const Game = () => {
   const sessionMachine = useContext(store)
   const { state, send } = sessionMachine
-  // console.log("GamePage", state.context)
-  let token = null
-  if (isClient) {
-    token = state.context.token
-  }
-  let [gameState, gameSend] = useMachine(pokerMachineFactory(token))
-  const auth = {
-    Authorization: `Bearer ${token}`,
-  }
-  const fetchOptions = token !== null ? { headers: auth } : {}
+  const { token } = state.context
+  const [gameState, gameSend] = useMachine(pokerMachineFactory(token))
   const [fetchState] = useMachine(
-    fetchMachineFactory(`${GATSBY_API_URL}/users/me`, fetchOptions)
+    fetchMachineFactory(`${GATSBY_API_URL}/users/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
   )
-  if (!isClient) {
-    gameState = {}
-    gameState.value = "idle"
-  }
   return (
     <>
       <SEO title="Video Poker" />
@@ -51,5 +42,11 @@ const GamePage = () => {
       {/* <pre>{JSON.stringify(gameState.context, null, 2)}</pre> */}
     </>
   )
+}
+
+const GamePage = () => {
+  const { isClient, key } = useIsClient()
+  if (!isClient) return null
+  return <Game />
 }
 export default GamePage
