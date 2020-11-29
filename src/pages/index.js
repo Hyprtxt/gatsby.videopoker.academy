@@ -30,7 +30,7 @@ const IndexPage = () => {
           )}
           {state.value === "active" && (
             <li>
-              <Link to="/game">Play this game online</Link>
+              <Link to="/poker">Play this game online</Link>
             </li>
           )}
           <li>

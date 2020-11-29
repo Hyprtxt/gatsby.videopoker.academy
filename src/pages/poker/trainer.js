@@ -15,7 +15,9 @@ const Game = () => {
   const sessionMachine = useContext(store)
   const { state, send } = sessionMachine
   const { token } = state.context
-  const [gameState, gameSend] = useMachine(pokerMachineFactory(token))
+  const [gameState, gameSend] = useMachine(
+    pokerMachineFactory(token, "trainer")
+  )
   const [fetchState] = useMachine(
     fetchMachineFactory(`${GATSBY_API_URL}/users/me`, {
       headers: {

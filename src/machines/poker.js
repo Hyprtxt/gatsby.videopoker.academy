@@ -19,9 +19,10 @@ const holdCard = hold_index =>
       ),
   })
 
-const fetchGame = token => {
+const fetchGame = context => {
+  const { token, mode } = context
   // console.log("token", token)
-  return fetch(`${GATSBY_API_URL}/play`, {
+  return fetch(`${GATSBY_API_URL}/play/${mode}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -43,11 +44,12 @@ const fetchResults = context => {
     body: JSON.stringify({ Holds: holds }),
   }).then(response => response.json())
 }
-const pokerMachineFactory = token =>
+const pokerMachineFactory = (token, mode) =>
   Machine({
     initial: "idle",
     context: {
       token,
+      mode,
       credits: "?",
       game_id: null,
       hand: null,
@@ -68,14 +70,15 @@ const pokerMachineFactory = token =>
       loadingGame: {
         invoke: {
           id: "getPlay",
-          src: (context, event) => fetchGame(context.token),
+          src: (context, event) => fetchGame(context),
           onDone: {
             target: "active",
             actions: assign({
               result: null,
-              strategy: null,
               draw: null,
               final_cards: null,
+              strategy: (context, event) =>
+                context.mode === "casual" ? event.data.Strategy : null,
               hand: (context, event) => event.data.Hand,
               credits: (context, event) => event.data.User.Credits,
               game_id: (context, event) => {
@@ -131,6 +134,17 @@ const pokerMachineFactory = token =>
               holds: [true, true, true, true, true],
             }),
           },
+          SUGGEST: {
+            // @todo gaurd this if the mode isnt right
+            actions: assign({
+              holds: (context, event) =>
+                ["1", "2", "3", "4", "5"].map(slot =>
+                  context.strategy.strategy.indexOf(`HOLD_${slot}`) !== -1
+                    ? true
+                    : false
+                ),
+            }),
+          },
           SCORE: {
             target: "loadingResults",
           },
@@ -145,6 +159,8 @@ const pokerMachineFactory = token =>
             actions: assign({
               draw: (context, event) => event.data.Draw,
               strategy: (context, event) => event.data.Strategy,
+              // strategy: (context, event) =>
+              //   context.mode !== "casual" ? event.data.Strategy : context.strategy,
               result: (context, event) => event.data.Result,
               credits: (context, event) => event.data.User.Credits,
               final_cards: (context, event) => event.data.FinalCards,

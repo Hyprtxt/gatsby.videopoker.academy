@@ -15,7 +15,7 @@ const Game = () => {
   const sessionMachine = useContext(store)
   const { state, send } = sessionMachine
   const { token } = state.context
-  const [gameState, gameSend] = useMachine(pokerMachineFactory(token))
+  const [gameState, gameSend] = useMachine(pokerMachineFactory(token, "casual"))
   const [fetchState] = useMachine(
     fetchMachineFactory(`${GATSBY_API_URL}/users/me`, {
       headers: {
@@ -25,7 +25,7 @@ const Game = () => {
   )
   return (
     <>
-      <SEO title="Lazy Video Poker" />
+      <SEO title="Casual Video Poker Trainer" />
       <p>
         {gameState.value === "idle"
           ? fetchState.value === "ready"
