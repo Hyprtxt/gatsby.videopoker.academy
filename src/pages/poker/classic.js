@@ -39,7 +39,7 @@ const Game = () => {
       <PokerUI {...{ gameState, gameSend }} />
       <h3>{gameState.value}</h3>
       {/* <pre>{JSON.stringify(fetchState.context, null, 2)}</pre> */}
-      {/* <pre>{JSON.stringify(gameState.context, null, 2)}</pre> */}
+      <pre>{JSON.stringify(gameState.context, null, 2)}</pre>
     </>
   )
 }

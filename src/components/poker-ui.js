@@ -27,7 +27,7 @@ const Card = ({ index, state, handleClick, children }) => {
   )
 }
 
-const PokerUI = ({ gameState, gameSend }) => {
+const PokerUI = ({ gameState, gameSend, children }) => {
   const mapCards = (item, index) => {
     return (
       <Card
@@ -105,6 +105,7 @@ const PokerUI = ({ gameState, gameSend }) => {
           START
         </button>
       )}
+      {children}
       {gameState.value === "active" && (
         <button
           className="btn btn-primary"

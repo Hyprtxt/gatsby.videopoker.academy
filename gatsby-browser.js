@@ -1,12 +1,14 @@
 const React = require("react")
-const Layout = require("./src/components/layout").default
-const { XStateProvider } = require("./src/store")
+const Layout = require("src/components/layout").default
+const { XStateProvider } = require("src/store")
 
 /**
  * Implement Gatsby's Browser APIs in this file.
  *
  * See: https://www.gatsbyjs.com/docs/browser-apis/
  */
+
+require("src/style/layout.sass")
 
 // You can delete this file if you're not using it
 exports.onPreRouteUpdate = ({ location, prevLocation }) => {

@@ -55,6 +55,7 @@ const pokerMachineFactory = token =>
       final_cards: null,
       holds: [false, false, false, false, false],
       result: null,
+      strategy: null,
     },
     states: {
       idle: {
@@ -72,6 +73,7 @@ const pokerMachineFactory = token =>
             target: "active",
             actions: assign({
               result: null,
+              strategy: null,
               draw: null,
               final_cards: null,
               hand: (context, event) => event.data.Hand,
@@ -142,6 +144,7 @@ const pokerMachineFactory = token =>
             target: "draw",
             actions: assign({
               draw: (context, event) => event.data.Draw,
+              strategy: (context, event) => event.data.Strategy,
               result: (context, event) => event.data.Result,
               credits: (context, event) => event.data.User.Credits,
               final_cards: (context, event) => event.data.FinalCards,

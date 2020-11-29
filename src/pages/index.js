@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import { store } from "src/store"
 import { Link } from "gatsby"
 import SEO from "src/components/seo"
@@ -9,13 +9,12 @@ const IndexPage = () => {
   const sessionMachine = useContext(store)
   let { state } = sessionMachine
   let user = "people"
-  if (!isClient) {
-    state = { value: "inactive" }
-  }
-  if (state.value === "active") {
-    user = state.context.user.username
-    // user = state.context.user.Handle
-  }
+  useEffect(() => {
+    if (state.value === "active") {
+      user = state.context.user.username
+      // user = state.context.user.Handle
+    }
+  })
   return (
     <>
       <SEO title="Home" />
