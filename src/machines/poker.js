@@ -98,7 +98,7 @@ const pokerMachineFactory = (token, mode) =>
             actions: [
               holdToggle(0),
               (context, event) => {
-                console.log(event, "good")
+                // console.log(event, "good")
               },
             ],
           },
@@ -135,15 +135,19 @@ const pokerMachineFactory = (token, mode) =>
             }),
           },
           SUGGEST: {
-            // @todo gaurd this if the mode isnt right
-            actions: assign({
-              holds: (context, event) =>
-                ["1", "2", "3", "4", "5"].map(slot =>
-                  context.strategy.strategy.indexOf(`HOLD_${slot}`) !== -1
-                    ? true
-                    : false
-                ),
-            }),
+            actions: [
+              // @todo does this even work? gaurd this if the mode isnt right
+              (context, event) =>
+                context.mode !== "casual" ? { target: "failure" } : null,
+              assign({
+                holds: (context, event) =>
+                  ["1", "2", "3", "4", "5"].map(slot =>
+                    context.strategy.strategy.indexOf(`HOLD_${slot}`) !== -1
+                      ? true
+                      : false
+                  ),
+              }),
+            ],
           },
           SCORE: {
             target: "loadingResults",

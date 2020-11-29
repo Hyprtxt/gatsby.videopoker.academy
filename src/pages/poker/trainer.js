@@ -6,10 +6,8 @@ import SEO from "src/components/seo"
 import pokerMachineFactory from "src/machines/poker"
 import { useMachine } from "@xstate/react"
 import PokerUI from "src/components/poker-ui"
-import fetchMachineFactory from "src/machines/fetch"
+import PreloadCredits from "src/components/poker-ui/credits"
 import useIsClient from "src/hooks/use-is-client"
-
-const GATSBY_API_URL = process.env.GATSBY_API_URL || "http://localhost:1337"
 
 const Game = () => {
   const sessionMachine = useContext(store)
@@ -18,30 +16,15 @@ const Game = () => {
   const [gameState, gameSend] = useMachine(
     pokerMachineFactory(token, "trainer")
   )
-  const [fetchState] = useMachine(
-    fetchMachineFactory(`${GATSBY_API_URL}/users/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-  )
   return (
     <>
       <SEO title="Video Poker" />
-      <p>
-        {gameState.value === "idle"
-          ? fetchState.value === "ready"
-            ? `Credits: ${fetchState.context.response.Credits}`
-            : "Credits: loading..."
-          : null}
-      </p>
-      {fetchState.value === "error" ? (
-        <p>{fetchState.context.error}, Do you have an account?</p>
-      ) : null}
+      {/* // @todo gaurd this if the mode isnt right */}
+      {/* <PreloadCredits {...{ gameState, token }} /> */}
       <PokerUI {...{ gameState, gameSend }} />
       <h3>{gameState.value}</h3>
       {/* <pre>{JSON.stringify(fetchState.context, null, 2)}</pre> */}
-      <pre>{JSON.stringify(gameState.context, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(gameState.context, null, 2)}</pre> */}
     </>
   )
 }

@@ -27,6 +27,22 @@ const Card = ({ index, state, handleClick, children }) => {
   )
 }
 
+const MachineButton = ({ gameState, gameSend, eventSlug, activeOn }) => (
+  <>
+    {activeOn.indexOf(gameState.value) !== -1 && (
+      <button
+        className="btn btn-primary"
+        onClick={e => {
+          e.preventDefault()
+          gameSend(eventSlug)
+        }}
+      >
+        {eventSlug}
+      </button>
+    )}
+  </>
+)
+
 const PokerUI = ({ gameState, gameSend, children }) => {
   const mapCards = (item, index) => {
     return (
@@ -77,14 +93,15 @@ const PokerUI = ({ gameState, gameSend, children }) => {
   })
   return (
     <>
-      {gameState.value !== "idle" ? (
-        gameState.context.credits !== "?" ? (
-          <p>{`Credits: ${gameState.context.credits}`}</p>
+      {gameState.context.mode !== "trainer" ? (
+        gameState.value !== "idle" ? (
+          gameState.context.credits !== "?" ? (
+            <p>{`Credits: ${gameState.context.credits}`}</p>
+          ) : null
         ) : null
       ) : null}
-      {(gameState.value === "active" ||
-        gameState.value === "loadingResults" ||
-        gameState.value === "score") && (
+      {["active", "loadingResults", "score"].indexOf(gameState.value) !==
+        -1 && (
         <div>
           {gameState.context[eventContext[gameState.value]].map(mapCards)}
           <div className="clearfix" />
@@ -93,30 +110,28 @@ const PokerUI = ({ gameState, gameSend, children }) => {
       {gameState.value === "score" && (
         <pre>{JSON.stringify(gameState.context.result, null, 2)}</pre>
       )}
-      {/* <div className="clearfix"></div> */}
-      {(gameState.value === "idle" || gameState.value === "score") && (
-        <button
-          className="btn btn-primary"
-          onClick={e => {
-            e.preventDefault()
-            gameSend("START")
-          }}
-        >
-          START
-        </button>
-      )}
+      <MachineButton
+        {...{
+          gameState,
+          gameSend,
+          eventSlug: "START",
+          activeOn: ["idle", "score"],
+        }}
+      />
       {children}
-      {gameState.value === "active" && (
-        <button
-          className="btn btn-primary"
-          onClick={e => {
-            e.preventDefault()
-            gameSend("SCORE")
+      {gameState.context.mode === "trainer" ? (
+        <MachineButton
+          {...{
+            gameState,
+            gameSend,
+            eventSlug: "SUGGEST",
+            activeOn: ["active"],
           }}
-        >
-          SCORE
-        </button>
-      )}
+        />
+      ) : null}
+      <MachineButton
+        {...{ gameState, gameSend, eventSlug: "SCORE", activeOn: ["active"] }}
+      />
     </>
   )
 }
