@@ -3,7 +3,7 @@ import PreloadCredits from "src/components/poker-ui/credits"
 import Card from "src/components/poker-ui/card"
 import MachineButton from "src/components/poker-ui/machine-button"
 
-const PokerUI = ({ gameState, gameSend, token, children }) => {
+const TrainerPokerUI = ({ gameState, gameSend, token, children }) => {
   const mapCards = (item, index) => {
     return (
       <Card
@@ -19,11 +19,23 @@ const PokerUI = ({ gameState, gameSend, token, children }) => {
       </Card>
     )
   }
-  const eventContext = {
-    active: "hand",
-    score: "final_cards",
-    loadingResults: "hand",
+  const mapResultCards = (item, index) => {
+    return (
+      <Card
+        key={index}
+        index={index}
+        state={gameState}
+        holdDataSource={["1", "2", "3", "4", "5"].map(slot =>
+          gameState.context.strategy.strategy.indexOf(`HOLD_${slot}`) > -1
+            ? true
+            : false
+        )}
+      >
+        {item}
+      </Card>
+    )
   }
+
   useEffect(() => {
     const handleKeyboardEvent = event => {
       // console.log(event.key, event.type)
@@ -40,7 +52,7 @@ const PokerUI = ({ gameState, gameSend, token, children }) => {
           return gameSend("HOLD_TOGGLE_5")
         case "Enter":
           return gameState.value === "active"
-            ? gameSend("SCORE")
+            ? gameSend("CHECK")
             : gameSend("START")
         default:
           break
@@ -51,47 +63,44 @@ const PokerUI = ({ gameState, gameSend, token, children }) => {
       document.removeEventListener("keydown", handleKeyboardEvent)
     }
   })
+  const eventContext = {
+    active: "hand",
+    result: "final_cards",
+    loadingResults: "hand",
+  }
   return (
     <>
-      <PreloadCredits {...{ gameState, token }} />
-      {gameState.value !== "idle" ? (
-        gameState.context.credits !== "?" ? (
-          <p>{`Credits: ${gameState.context.credits}`}</p>
-        ) : null
-      ) : null}
-      {["active", "loadingResults", "score"].indexOf(gameState.value) !==
+      {["active", "loadingResults", "result"].indexOf(gameState.value) !==
         -1 && (
         <div>
           {gameState.context[eventContext[gameState.value]].map(mapCards)}
           <div className="clearfix" />
         </div>
       )}
-      {gameState.value === "score" && (
-        <pre>{JSON.stringify(gameState.context.result, null, 2)}</pre>
-      )}
+      {gameState.value === "gameOver" && [
+        <h3>Your Move:</h3>,
+        gameState.context["hand"].map(mapCards),
+        <h3>Correct Move:</h3>,
+        gameState.context["hand"].map(mapResultCards),
+        <h3>{`Wrong! Rule #${gameState.context.strategy.rule_number}: ${gameState.context.strategy.rule}`}</h3>,
+      ]}
+      {/* {gameState.value === "result" && children} */}
       <MachineButton
         {...{
           gameState,
           gameSend,
           eventSlug: "START",
-          activeOn: ["idle", "score"],
+          activeOn: ["idle", "result"],
         }}
       />
-      {gameState.context.mode === "casual" ? (
-        <MachineButton
-          {...{
-            gameState,
-            gameSend,
-            eventSlug: "SUGGEST",
-            activeOn: ["active"],
-          }}
-        />
-      ) : null}
       <MachineButton
-        {...{ gameState, gameSend, eventSlug: "SCORE", activeOn: ["active"] }}
+        {...{ gameState, gameSend, eventSlug: "CHECK", activeOn: ["active"] }}
       />
+      {gameState.value === "result" && (
+        <h3>{`Correct! Rule #${gameState.context.strategy.rule_number}: ${gameState.context.strategy.rule}`}</h3>
+      )}
     </>
   )
 }
 
-export default PokerUI
+export default TrainerPokerUI

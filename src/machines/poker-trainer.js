@@ -44,155 +44,159 @@ const fetchResults = context => {
     body: JSON.stringify({ Holds: holds }),
   }).then(response => response.json())
 }
-const pokerMachineFactory = (token, mode) =>
-  Machine({
-    initial: "idle",
-    context: {
-      token,
-      mode,
-      credits: "?",
-      game_id: null,
-      hand: null,
-      draw: null,
-      final_cards: null,
-      holds: [false, false, false, false, false],
-      result: null,
-      strategy: null,
-    },
-    states: {
-      idle: {
-        on: {
-          START: {
-            target: "loadingGame",
+const pokerMachineFactory = token =>
+  Machine(
+    {
+      initial: "idle",
+      context: {
+        token,
+        mode: "trainer",
+        streak: 0,
+        game_id: null,
+        hand: null,
+        draw: null,
+        final_cards: null,
+        holds: [false, false, false, false, false],
+        result: null,
+        strategy: null,
+      },
+      states: {
+        idle: {
+          on: {
+            START: {
+              target: "loadingGame",
+            },
           },
         },
-      },
-      loadingGame: {
-        invoke: {
-          id: "getPlay",
-          src: (context, event) => fetchGame(context),
-          onDone: {
-            target: "active",
-            actions: assign({
-              result: null,
-              draw: null,
-              final_cards: null,
-              strategy: (context, event) =>
-                context.mode === "casual" ? event.data.Strategy : null,
-              hand: (context, event) => event.data.Hand,
-              credits: (context, event) => event.data.User.Credits,
-              game_id: (context, event) => {
-                // console.log("getPlay", event.data)
-                return event.data.id
-              },
-            }),
-          },
-          onError: {
-            target: "failure",
-          },
-        },
-      },
-      active: {
-        on: {
-          HOLD_TOGGLE_1: {
-            actions: [
-              holdToggle(0),
-              (context, event) => {
-                // console.log(event, "good")
-              },
-            ],
-          },
-          HOLD_TOGGLE_2: {
-            actions: holdToggle(1),
-          },
-          HOLD_TOGGLE_3: {
-            actions: holdToggle(2),
-          },
-          HOLD_TOGGLE_4: {
-            actions: holdToggle(3),
-          },
-          HOLD_TOGGLE_5: {
-            actions: holdToggle(4),
-          },
-          HOLD_1: {
-            actions: holdCard(0),
-          },
-          HOLD_2: {
-            actions: holdCard(1),
-          },
-          HOLD_3: {
-            actions: holdCard(2),
-          },
-          HOLD_4: {
-            actions: holdCard(3),
-          },
-          HOLD_5: {
-            actions: holdCard(4),
-          },
-          HOLD_ALL: {
-            actions: assign({
-              holds: [true, true, true, true, true],
-            }),
-          },
-          SUGGEST: {
-            actions: [
-              // @todo does this even work? gaurd this if the mode isnt right
-              (context, event) =>
-                context.mode !== "casual" ? { target: "failure" } : null,
-              assign({
-                holds: (context, event) =>
-                  ["1", "2", "3", "4", "5"].map(slot =>
-                    context.strategy.strategy.indexOf(`HOLD_${slot}`) !== -1
-                      ? true
-                      : false
-                  ),
+        loadingGame: {
+          invoke: {
+            id: "getPlay",
+            src: (context, event) => fetchGame(context),
+            onDone: {
+              target: "active",
+              actions: assign({
+                result: null,
+                draw: null,
+                final_cards: null,
+                strategy: null,
+                hand: (context, event) => event.data.Hand,
+                credits: (context, event) => event.data.User.Credits,
+                game_id: (context, event) => {
+                  // console.log("getPlay", event.data)
+                  return event.data.id
+                },
               }),
-            ],
-          },
-          SCORE: {
-            target: "loadingResults",
+            },
+            onError: {
+              target: "failure",
+            },
           },
         },
-      },
-      loadingResults: {
-        invoke: {
-          id: "getResult",
-          src: (context, event) => fetchResults(context),
-          onDone: {
-            target: "draw",
+        active: {
+          on: {
+            CHECK: {
+              target: "loadingResults",
+            },
+            HOLD_TOGGLE_1: {
+              actions: holdToggle(0),
+            },
+            HOLD_TOGGLE_2: {
+              actions: holdToggle(1),
+            },
+            HOLD_TOGGLE_3: {
+              actions: holdToggle(2),
+            },
+            HOLD_TOGGLE_4: {
+              actions: holdToggle(3),
+            },
+            HOLD_TOGGLE_5: {
+              actions: holdToggle(4),
+            },
+            HOLD_1: {
+              actions: holdCard(0),
+            },
+            HOLD_2: {
+              actions: holdCard(1),
+            },
+            HOLD_3: {
+              actions: holdCard(2),
+            },
+            HOLD_4: {
+              actions: holdCard(3),
+            },
+            HOLD_5: {
+              actions: holdCard(4),
+            },
+            HOLD_ALL: {
+              actions: assign({
+                holds: [true, true, true, true, true],
+              }),
+            },
+          },
+        },
+        loadingResults: {
+          invoke: {
+            id: "getResult",
+            src: (context, event) => fetchResults(context),
+            onDone: {
+              target: "processResults",
+              actions: assign({
+                draw: (context, event) => event.data.Draw,
+                strategy: (context, event) => event.data.Strategy,
+                result: (context, event) => event.data.Result,
+                final_cards: (context, event) => event.data.FinalCards,
+                // streak
+              }),
+            },
+            onError: {
+              target: "failure",
+            },
+          },
+        },
+        processResults: {
+          always: [
+            {
+              target: "addToStreak",
+              cond: "didPlayerMatchStrategy",
+            },
+            { target: "gameOver" },
+          ],
+        },
+        addToStreak: {
+          always: {
+            target: "result",
             actions: assign({
-              draw: (context, event) => event.data.Draw,
-              strategy: (context, event) => event.data.Strategy,
-              // strategy: (context, event) =>
-              //   context.mode !== "casual" ? event.data.Strategy : context.strategy,
-              result: (context, event) => event.data.Result,
-              credits: (context, event) => event.data.User.Credits,
-              final_cards: (context, event) => event.data.FinalCards,
+              streak: (context, event) => context.streak + 1,
             }),
           },
-          onError: {
-            target: "failure",
+        },
+        result: {
+          on: {
+            START: {
+              target: "loadingGame",
+              actions: assign({
+                holds: [false, false, false, false, false],
+              }),
+            },
           },
         },
+        gameOver: { type: "final" },
+        failure: {},
       },
-      draw: {
-        always: {
-          target: "score",
-          actions: assign({
-            holds: [false, false, false, false, false],
-            // result: (context, event) => Poker.Score(context.final_cards),
-          }),
-        },
-      },
-      score: {
-        on: {
-          START: {
-            target: "loadingGame",
-          },
-        },
-      },
-      failure: {},
     },
-  })
+    {
+      guards: {
+        didPlayerMatchStrategy: (context, event) =>
+          JSON.stringify(
+            context.holds
+              .map((isHold, index) => (isHold ? `HOLD_${index + 1}` : null))
+              // .filter(🙂 => 🙂),
+              .filter(x => x),
+            null,
+            0
+          ) === JSON.stringify(context.strategy.strategy, null, 0),
+      },
+    }
+  )
 
 export default pokerMachineFactory
