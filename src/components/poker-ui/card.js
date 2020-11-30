@@ -23,7 +23,7 @@ const Card = ({ index, state, handleClick, children, holdDataSource }) => {
         <span className={`value`}>{children[1]}</span>
         <span className={`suit suit-${children[0]}`}>{children[0]}</span>
       </div>
-      {["score", "loadingResults", "result"].indexOf(state.value) !== -1 && (
+      {["active"].indexOf(state.value) > -1 && (
         <button className="btn btn-info" onClick={handleClick}>
           {held ? "Held" : "Hold"}
         </button>
