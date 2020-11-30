@@ -70,18 +70,20 @@ const PokerUI = ({ gameState, gameSend, token, children }) => {
           <div className="clearfix" />
         </div>
       )}
-      {gameState.value === "score" && (
-        <pre>{JSON.stringify(gameState.context.result, null, 2)}</pre>
-      )}
+      {gameState.context.mode !== "trainer"
+        ? gameState.value === "score" && (
+            <pre>{JSON.stringify(gameState.context.result, null, 2)}</pre>
+          )
+        : gameState.value === "score" && children}
       <MachineButton
         {...{
           gameState,
           gameSend,
           eventSlug: "START",
-          activeOn: ["idle", "score"],
+          activeOn:
+            gameState.context.mode !== "trainer" ? ["idle", "score"] : ["idle"],
         }}
       />
-      {children}
       {gameState.context.mode === "casual" ? (
         <MachineButton
           {...{
