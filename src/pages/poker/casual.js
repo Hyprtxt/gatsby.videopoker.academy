@@ -5,9 +5,6 @@ import { store } from "src/store"
 import pokerMachineFactory from "src/machines/poker"
 import PokerUI from "src/components/poker-ui"
 import SEO from "src/components/seo"
-import PreloadCredits from "src/components/poker-ui/credits"
-
-const GATSBY_API_URL = process.env.GATSBY_API_URL || "http://localhost:1337"
 
 const Game = () => {
   const sessionMachine = useContext(store)
@@ -17,8 +14,7 @@ const Game = () => {
   return (
     <>
       <SEO title="Casual Video Poker Trainer" />
-      <PreloadCredits {...{ gameState, token }} />
-      <PokerUI {...{ gameState, gameSend }}></PokerUI>
+      <PokerUI {...{ gameState, gameSend, token }} />
       <h3>{gameState.value}</h3>
       {/* <pre>{JSON.stringify(fetchState.context, null, 2)}</pre> */}
       {/* <pre>{JSON.stringify(gameState.context, null, 2)}</pre> */}

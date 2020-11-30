@@ -159,16 +159,12 @@ const pokerMachineFactory = (token, mode) =>
           id: "getResult",
           src: (context, event) => fetchResults(context),
           onDone: {
-            target: "score",
+            target: "draw",
             actions: assign({
               draw: (context, event) => event.data.Draw,
               strategy: (context, event) => event.data.Strategy,
               // strategy: (context, event) =>
               //   context.mode !== "casual" ? event.data.Strategy : context.strategy,
-              holds: (context, event) =>
-                context.mode !== "trainer"
-                  ? [false, false, false, false, false]
-                  : context.holds,
               result: (context, event) => event.data.Result,
               credits: (context, event) => event.data.User.Credits,
               final_cards: (context, event) => event.data.FinalCards,
@@ -179,13 +175,19 @@ const pokerMachineFactory = (token, mode) =>
           },
         },
       },
+      draw: {
+        always: {
+          target: "score",
+          actions: assign({
+            holds: [false, false, false, false, false],
+            // result: (context, event) => Poker.Score(context.final_cards),
+          }),
+        },
+      },
       score: {
         on: {
           START: {
             target: "loadingGame",
-            actions: assign({
-              holds: [false, false, false, false, false],
-            }),
           },
         },
       },

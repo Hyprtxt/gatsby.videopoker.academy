@@ -1,49 +1,9 @@
 import React, { useEffect } from "react"
+import PreloadCredits from "src/components/poker-ui/credits"
+import Card from "src/components/poker-ui/card"
+import MachineButton from "src/components/poker-ui/machine-button"
 
-const Card = ({ index, state, handleClick, children }) => {
-  // console.log(children[0], children[1])
-  const held = state.context.holds[index]
-  return (
-    <div className={`card-unit key-${index} ${held ? "hold" : ""}`}>
-      <div
-        className="card"
-        onClick={handleClick}
-        role="button"
-        tabIndex={index}
-      >
-        <span className={`info d-none-md`}>
-          {children[1]}
-          <span className={`suit-${children[0]}`}>{children[0]}</span>
-        </span>
-        <span className={`value`}>{children[1]}</span>
-        <span className={`suit suit-${children[0]}`}>{children[0]}</span>
-      </div>
-      {state.value !== "score" && (
-        <button className="btn btn-info" onClick={handleClick}>
-          {held ? "Held" : "Hold"}
-        </button>
-      )}
-    </div>
-  )
-}
-
-const MachineButton = ({ gameState, gameSend, eventSlug, activeOn }) => (
-  <>
-    {activeOn.indexOf(gameState.value) !== -1 && (
-      <button
-        className="btn btn-primary"
-        onClick={e => {
-          e.preventDefault()
-          gameSend(eventSlug)
-        }}
-      >
-        {eventSlug}
-      </button>
-    )}
-  </>
-)
-
-const PokerUI = ({ gameState, gameSend, children }) => {
+const PokerUI = ({ gameState, gameSend, token, children }) => {
   const mapCards = (item, index) => {
     return (
       <Card
@@ -94,6 +54,9 @@ const PokerUI = ({ gameState, gameSend, children }) => {
   return (
     <>
       {gameState.context.mode !== "trainer" ? (
+        <PreloadCredits {...{ gameState, token }} />
+      ) : null}
+      {gameState.context.mode !== "trainer" ? (
         gameState.value !== "idle" ? (
           gameState.context.credits !== "?" ? (
             <p>{`Credits: ${gameState.context.credits}`}</p>
@@ -119,7 +82,7 @@ const PokerUI = ({ gameState, gameSend, children }) => {
         }}
       />
       {children}
-      {gameState.context.mode === "trainer" ? (
+      {gameState.context.mode === "casual" ? (
         <MachineButton
           {...{
             gameState,
