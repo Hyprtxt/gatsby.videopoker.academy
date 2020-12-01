@@ -38,6 +38,8 @@ const PokerUI = ({ gameState, gameSend, token, children }) => {
           return gameSend("HOLD_TOGGLE_4")
         case "5":
           return gameSend("HOLD_TOGGLE_5")
+        case "'":
+          return gameSend("SUGGEST")
         case "Enter":
           return gameState.value === "active"
             ? gameSend("SCORE")

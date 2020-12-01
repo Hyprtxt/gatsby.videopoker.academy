@@ -2,8 +2,8 @@ import React from "react"
 
 const Card = ({ index, state, handleClick, children, holdDataSource }) => {
   // console.log(children[0], children[1])
+  // console.log("holdDataSource", holdDataSource)
   let holdData = state.context.holds
-  console.log("holdDataSource", holdDataSource)
   if (holdDataSource) {
     holdData = holdDataSource
   }

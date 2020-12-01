@@ -3,6 +3,7 @@ import { Link } from "gatsby"
 import { store } from "src/store"
 import PropTypes from "prop-types"
 import useIsClient from "src/hooks/use-is-client"
+import ServerStatus from "src/components/server-status"
 
 const Header = ({ siteTitle }) => {
   const { isClient, key } = useIsClient()
@@ -18,12 +19,14 @@ const Header = ({ siteTitle }) => {
     }
   }
   return (
-    <header className="mb-3">
+    <header className="mt-3 fixed-bottom">
       <div className="bg-info px-3 py-1">
+        <ServerStatus success={false} />
         <Link to="/">
           <h1>{siteTitle}</h1>
         </Link>
         <p>{`User: ${user}`}</p>
+
         {/* <pre>{JSON.stringify(state.value, null, 2)}</pre> */}
         {/* <pre>{JSON.stringify(state.context.user.Credits, null, 2)}</pre> */}
       </div>

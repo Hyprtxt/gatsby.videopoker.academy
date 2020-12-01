@@ -6,7 +6,7 @@ const GATSBY_API_URL = process.env.GATSBY_API_URL || "http://localhost:1337"
 
 const Logout = () => {
   const [fetchState] = useMachine(
-    fetchMachineFactory(`${GATSBY_API_URL}/users-permissions/providers`, {})
+    fetchMachineFactory(`${GATSBY_API_URL}/providers`, {})
   )
   return (
     <>
@@ -19,9 +19,7 @@ const Logout = () => {
         </p>
         <ul>
           {fetchState.value === "ready" ? (
-            Object.keys(fetchState.context.response).map((key, index) => {
-              const provider = fetchState.context.response[key]
-              if (!provider.enabled) return null
+            fetchState.context.response.map(key => {
               return (
                 <li>
                   <a href={`${GATSBY_API_URL}/connect/${key}`}>{key}</a>

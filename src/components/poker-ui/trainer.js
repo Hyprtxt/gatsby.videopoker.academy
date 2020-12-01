@@ -1,7 +1,8 @@
 import React, { useEffect } from "react"
-import PreloadCredits from "src/components/poker-ui/credits"
+// import PreloadCredits from "src/components/poker-ui/credits"
 import Card from "src/components/poker-ui/card"
 import MachineButton from "src/components/poker-ui/machine-button"
+import { Link } from "gatsby"
 
 const TrainerPokerUI = ({ gameState, gameSend, token, children }) => {
   const mapCards = (item, index) => {
@@ -98,6 +99,22 @@ const TrainerPokerUI = ({ gameState, gameSend, token, children }) => {
       />
       {gameState.value === "result" && (
         <h3>{`Correct! Rule #${gameState.context.strategy.rule_number}: ${gameState.context.strategy.rule}`}</h3>
+      )}
+      {gameState.value === "gameOver" && (
+        <>
+          <h3>{`Game Over, Final Score: ${gameState.context.streak}`}</h3>
+          <Link to="/poker" className="btn btn-success">
+            Back to Lobby
+          </Link>
+          <button
+            className="btn btn-success"
+            onClick={() => {
+              window.location.reload()
+            }}
+          >
+            Try Again
+          </button>
+        </>
       )}
     </>
   )

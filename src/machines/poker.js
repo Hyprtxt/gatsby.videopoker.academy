@@ -21,16 +21,12 @@ const holdCard = hold_index =>
 
 const fetchGame = context => {
   const { token, mode } = context
-  // console.log("token", token)
+
   return fetch(`${GATSBY_API_URL}/play/${mode}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   }).then(response => response.json())
-  // .then(response => {
-  //   console.log("FETCH", response.json())
-  //   return response.json()
-  // })
 }
 const fetchResults = context => {
   const { game_id, token, holds } = context

@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: `VideoPoker.Academy`,
+    title: `VideoPoker(dot)Academy`,
     description: `Learn to play video poker, or don't!`,
     author: `@tdy721`,
   },
