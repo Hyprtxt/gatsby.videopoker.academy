@@ -16,6 +16,9 @@ steps:
     commands:
       - yarn
       - yarn build
+    environment:
+      GATSBY_API_URL:
+        from_secret: GATSBY_API_URL
   - name: stage
     image: alpine
     volumes:

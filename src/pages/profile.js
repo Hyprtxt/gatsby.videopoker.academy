@@ -73,7 +73,7 @@ const PlayerProfileForm = ({ token }) => {
 const PlayerPage = () => {
   const sessionMachine = useContext(store)
   const { state } = sessionMachine
-  const token = state.context.token
+  const token = state !== undefined ? state.context.token : null
   return (
     <>
       <SEO title="Home" />
