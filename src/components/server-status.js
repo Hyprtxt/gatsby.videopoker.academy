@@ -2,6 +2,8 @@ import React from "react"
 import { useMachine } from "@xstate/react"
 import fetchMachineFactory from "src/machines/fetch"
 
+// vpacademy
+
 const GATSBY_API_URL = process.env.GATSBY_API_URL || "http://localhost:1337"
 
 const ServerStatus = ({ size }) => {

@@ -1,0 +1,56 @@
+kind: pipeline
+name: default
+
+steps:
+  - name: restore-cache
+    image: drillster/drone-volume-cache
+    volumes:
+      - name: cache
+        path: /cache
+    settings:
+      restore: true
+      mount:
+        - ./node_modules
+  - name: build
+    image: node
+    commands:
+      - yarn
+      - yarn build
+  - name: stage
+    image: alpine
+    volumes:
+      - name: nginx
+        path: /drone/src/nginx
+    commands:
+      - ls
+      - ls nginx
+      # - cp -r out nginx/stage
+  # - name: deploy
+  #   image: alpine
+  #   volumes:
+  #     - name: nginx
+  #       path: /drone/src/nginx
+  #   commands:
+  #     - rm -r nginx/previous
+  #     - mv nginx/public nginx/previous
+  #     - mv nginx/stage nginx/public
+  #   when:
+  #     branch:
+  #       - main
+  - name: rebuild-cache
+    image: drillster/drone-volume-cache
+    volumes:
+      - name: cache
+        path: /cache
+    settings:
+      rebuild: true
+      mount:
+        - ./node_modules
+
+volumes:
+  - name: cache
+    host:
+      path: /tmp/cache/videopoker.academy
+  - name: nginx
+    host:
+      path: /var/www/videopoker.academy

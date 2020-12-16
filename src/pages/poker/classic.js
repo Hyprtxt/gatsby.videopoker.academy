@@ -8,7 +8,7 @@ import PokerUI from "src/components/poker-ui"
 
 const Game = () => {
   const sessionMachine = useContext(store)
-  const { state, send } = sessionMachine
+  const { state } = sessionMachine
   const { token } = state.context
   const [gameState, gameSend] = useMachine(
     pokerMachineFactory(token, "classic")
@@ -24,7 +24,7 @@ const Game = () => {
 }
 
 const GamePage = () => {
-  const { isClient, key } = useIsClient()
+  const { isClient } = useIsClient()
   if (!isClient) return null
   return <Game />
 }

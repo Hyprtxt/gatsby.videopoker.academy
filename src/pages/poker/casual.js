@@ -8,7 +8,7 @@ import SEO from "src/components/seo"
 
 const Game = () => {
   const sessionMachine = useContext(store)
-  const { state, send } = sessionMachine
+  const { state } = sessionMachine
   const { token } = state.context
   const [gameState, gameSend] = useMachine(pokerMachineFactory(token, "casual"))
   return (
@@ -23,7 +23,7 @@ const Game = () => {
 }
 
 const GamePage = () => {
-  const { isClient, key } = useIsClient()
+  const { isClient } = useIsClient()
   if (!isClient) return null
   return <Game />
 }

@@ -28,9 +28,9 @@ const fetchGame = context => {
   }).then(response => response.json())
 }
 const fetchResults = context => {
-  const { game_id, token, holds } = context
-  // console.log("Doing a fetch", `${GATSBY_API_URL}/draw/${game_id}`)
-  return fetch(`${GATSBY_API_URL}/draw/${game_id}`, {
+  const { hash, token, holds } = context
+  // console.log("Doing a fetch", `${GATSBY_API_URL}/draw/${hash}`)
+  return fetch(`${GATSBY_API_URL}/draw/${hash}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -47,6 +47,7 @@ const pokerMachineFactory = token =>
         token,
         mode: "trainer",
         streak: 0,
+        hash: null,
         game_id: null,
         hand: null,
         draw: null,
@@ -74,10 +75,11 @@ const pokerMachineFactory = token =>
                 draw: null,
                 final_cards: null,
                 strategy: null,
+                hash: (context, event) => event.data.Hash,
                 hand: (context, event) => event.data.Hand,
                 credits: (context, event) => event.data.User.Credits,
                 game_id: (context, event) => {
-                  // console.log("getPlay", event.data)
+                  console.log("getPlay", event.data)
                   return event.data.id
                 },
               }),
@@ -189,6 +191,7 @@ const pokerMachineFactory = token =>
             null,
             0
           )
+          // This is a patch
           const server = JSON.stringify(context.strategy.strategy, null, 0)
           console.log("didPlayerMatch?", player, server)
           return player === server
