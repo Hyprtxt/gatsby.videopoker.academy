@@ -73,6 +73,7 @@ const PokerUI = ({ gameState, gameSend, token, children }) => {
       )}
       <MachineButton
         {...{
+          id: "game-button-start",
           gameState,
           gameSend,
           eventSlug: "START",
@@ -82,6 +83,7 @@ const PokerUI = ({ gameState, gameSend, token, children }) => {
       {gameState.context.mode === "casual" ? (
         <MachineButton
           {...{
+            id: "game-button-suggest",
             gameState,
             gameSend,
             eventSlug: "SUGGEST",
@@ -90,7 +92,7 @@ const PokerUI = ({ gameState, gameSend, token, children }) => {
         />
       ) : null}
       <MachineButton
-        {...{ gameState, gameSend, eventSlug: "SCORE", activeOn: ["active"] }}
+        {...{ id: "game-button-score", gameState, gameSend, eventSlug: "SCORE", activeOn: ["active"] }}
       />
     </>
   )

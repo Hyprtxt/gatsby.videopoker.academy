@@ -17,7 +17,7 @@ const Game = () => {
     <>
       <SEO title="Classic Video Poker - Jacks or Better" />
       <PokerUI {...{ gameState, gameSend, token }} />
-      <h3>{gameState.value}</h3>
+      <h3 id="status">{gameState.value}</h3>
       {/* <pre>{JSON.stringify(gameState.context, null, 2)}</pre> */}
     </>
   )

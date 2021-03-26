@@ -8,19 +8,19 @@ const GameViewPage = () => (
     <div className="p-5">
       <ul>
         <li>
-          <Link to={`classic`} className="btn btn-success">
+          <Link to={`classic`} className="btn btn-success" id="play-classic">
             Classic
           </Link>
           <p>Jacks or Better Poker</p>
         </li>
         <li>
-          <Link to={`casual`} className="btn btn-success">
+          <Link to={`casual`} className="btn btn-success" id="play-casual">
             Casual
           </Link>
           <p>Classic with a suggest button</p>
         </li>
         <li>
-          <Link to={`trainer`} className="btn btn-success">
+          <Link to={`trainer`} className="btn btn-success" id="play-trainer">
             Trainer
           </Link>
           <p>How long can you last?</p>

@@ -15,7 +15,7 @@ const Game = () => {
     <>
       <SEO title="Casual Video Poker Trainer" />
       <PokerUI {...{ gameState, gameSend, token }} />
-      <h3>{gameState.value}</h3>
+      <h3 id="status">{gameState.value}</h3>
       {/* <pre>{JSON.stringify(fetchState.context, null, 2)}</pre> */}
       {/* <pre>{JSON.stringify(gameState.context, null, 2)}</pre> */}
     </>
