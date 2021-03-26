@@ -24,8 +24,9 @@ const userProfileMachine = token =>
       context: {
         token,
         id: null,
-        handle: null,
-        credits: null,
+        handle: 'defaultHandle',
+        credits: 0,
+        provider: 'unknown',
         response: null,
         error: null,
       },

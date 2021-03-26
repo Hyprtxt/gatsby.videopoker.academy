@@ -8,6 +8,7 @@ import userProfileMachineFactory from "src/machines/user-profile"
 
 const PlayerProfileForm = ({ token }) => {
   const [user, send] = useMachine(userProfileMachineFactory(token))
+  console.log( user.context.handle )
   return (
     <form
       onSubmit={e => {
@@ -15,42 +16,42 @@ const PlayerProfileForm = ({ token }) => {
         send(e.type.toUpperCase())
       }}
     >
-      <div class="form-group">
-        <label for="handle">
+      <div className="form-group">
+        <label htmlFor="handle">
           Handle
           <input
             type="text"
-            class="form-control"
+            className="form-control"
             id="handle"
             aria-describedby="handleHelp"
-            value={user.context.handle}
+            value={user.context.handle }
             onChange={e =>
               send(e.type.toUpperCase(), { value: e.target.value })
             }
           />
         </label>
-        <small id="handleHelp" class="form-text text-muted">
+        <small id="handleHelp" className="form-text text-muted">
           This is your public name.
         </small>
       </div>
-      <div class="form-group">
-        <label for="credits">
+      <div className="form-group">
+        <label htmlFor="credits">
           Credits
           <input
             type="text"
-            class="form-control"
+            className="form-control"
             id="credits"
             value={user.context.credits}
             readOnly
           />
         </label>
       </div>
-      <div class="form-group">
-        <label for="provider">
+      <div className="form-group">
+        <label htmlFor="provider">
           Provider
           <input
             type="text"
-            class="form-control"
+            className="form-control"
             id="provider"
             value={user.context.provider}
             readOnly
@@ -59,7 +60,7 @@ const PlayerProfileForm = ({ token }) => {
       </div>
       <button
         type="submit"
-        class="btn btn-primary"
+        className="btn btn-primary"
         disabled={user.value !== "active"}
       >
         Update
