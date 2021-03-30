@@ -23,15 +23,30 @@ const PlayerProfileForm = ({ token }) => {
             className="form-control"
             id="handle"
             aria-describedby="handleHelp"
-            value={user.context.handle }
-            onChange={e =>
-              send(e.type.toUpperCase(), { value: e.target.value })
-            }
+            value={user.context.handle}
+            onChange={e => send("CHANGE_HANDLE", { value: e.target.value })}
           />
         </label>
         <small id="handleHelp" className="form-text text-muted">
           This is your public name.
         </small>
+      </div>
+      <div className="form-check">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          checked={user.context.joinTrainerLeaderboards}
+          id="joinTrainerLeaderboards"
+          onChange={e => {
+            console.log(e.type.toUpperCase(), e.target.checked)
+            send("CHANGE_JOIN_TRAINER_LEADERBOARDS", {
+              value: e.target.checked,
+            })
+          }}
+        />
+        <label className="form-check-label" htmlFor="joinTrainerLeaderboards">
+          Show on Trainer Leaderboards
+        </label>
       </div>
       <div className="form-group">
         <label htmlFor="credits">

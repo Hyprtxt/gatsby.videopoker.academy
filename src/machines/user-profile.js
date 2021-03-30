@@ -24,9 +24,10 @@ const userProfileMachine = token =>
       context: {
         token,
         id: null,
-        handle: 'defaultHandle',
+        handle: "defaultHandle",
         credits: 0,
-        provider: 'unknown',
+        provider: "unknown",
+        joinTrainerLeaderboards: false,
         response: null,
         error: null,
       },
@@ -48,6 +49,8 @@ const userProfileMachine = token =>
                 provider: (context, event) => event.data.provider,
                 handle: (context, event) => event.data.Handle,
                 credits: (context, event) => event.data.Credits,
+                joinTrainerLeaderboards: (context, event) =>
+                  event.data.joinTrainerLeaderboards,
               }),
             },
             onError: {
@@ -63,11 +66,21 @@ const userProfileMachine = token =>
         },
         active: {
           on: {
-            CHANGE: {
+            CHANGE_HANDLE: {
               target: "active",
               actions: [
                 assign({
                   handle: (context, event) => {
+                    return event.value
+                  },
+                }),
+              ],
+            },
+            CHANGE_JOIN_TRAINER_LEADERBOARDS: {
+              target: "active",
+              actions: [
+                assign({
+                  joinTrainerLeaderboards: (context, event) => {
                     return event.value
                   },
                 }),
@@ -88,7 +101,10 @@ const userProfileMachine = token =>
                   "Content-Type": "application/json",
                   Authorization: `Bearer ${context.token}`,
                 },
-                body: JSON.stringify({ Handle: context.handle }),
+                body: JSON.stringify({
+                  Handle: context.handle,
+                  joinTrainerLeaderboards: context.joinTrainerLeaderboards,
+                }),
               }),
             onDone: {
               target: "active",
@@ -98,6 +114,8 @@ const userProfileMachine = token =>
                 provider: (context, event) => event.data.provider,
                 handle: (context, event) => event.data.Handle,
                 credits: (context, event) => event.data.Credits,
+                joinTrainerLeaderboards: (context, event) =>
+                  event.data.joinTrainerLeaderboards,
               }),
             },
             onError: {
