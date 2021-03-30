@@ -27,7 +27,8 @@ steps:
     commands:
       - ls
       - ls nginx
-      - cp -r public nginx/stage
+      - rm -r nginx/stage
+      - mv public nginx/stage
   # - name: deploy
   #   image: alpine
   #   volumes:
