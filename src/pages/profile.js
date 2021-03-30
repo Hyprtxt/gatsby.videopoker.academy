@@ -8,7 +8,6 @@ import userProfileMachineFactory from "src/machines/user-profile"
 
 const PlayerProfileForm = ({ token }) => {
   const [user, send] = useMachine(userProfileMachineFactory(token))
-  console.log( user.context.handle )
   return (
     <form
       onSubmit={e => {
