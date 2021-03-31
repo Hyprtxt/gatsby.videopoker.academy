@@ -8,6 +8,7 @@
 import React from "react"
 // import PropTypes from "prop-types"
 import Header from "./header"
+import ToastDemo from "src/components/toast-demo"
 
 const Layout = props => {
   const { children } = props
@@ -15,6 +16,7 @@ const Layout = props => {
     <>
       <Header siteTitle={`VideoPoker.Academy`} />
       {children}
+
       <footer
         style={{
           marginTop: `2rem`,
@@ -22,6 +24,8 @@ const Layout = props => {
       >
         <p>© {new Date().getFullYear()}, built by Taylor</p>
       </footer>
+      <ToastDemo />
+      <div className="header-spacer" style={{ marginTop: "124px" }}></div>
     </>
   )
 }
