@@ -4,12 +4,11 @@ import { store } from "src/store"
 import SEO from "src/components/seo"
 import { useMachine } from "@xstate/react"
 import userProfileMachineFactory from "src/machines/user-profile"
-// import fetchTriggerMachineFactory from "src/machines/fetch-trigger"
 
-const PlayerProfileForm = ({ token }) => {
-  const { toastSend } = useContext(store)
+const PlayerProfileForm = ({}) => {
+  const { toastSend, state } = useContext(store)
+  const token = state !== undefined ? state.context.token : null
   const [user, send] = useMachine(userProfileMachineFactory(token, toastSend))
-
   return (
     <form
       onSubmit={e => {
@@ -82,7 +81,6 @@ const PlayerProfileForm = ({ token }) => {
         Update
       </button>
       {/*  */}
-      {/* <ToastDemo /> */}
       {/* <pre>{JSON.stringify(user.value, null, 2)}</pre> */}
       {/* <pre>{JSON.stringify(user.context, null, 2)}</pre> */}
     </form>
@@ -90,15 +88,12 @@ const PlayerProfileForm = ({ token }) => {
 }
 
 const PlayerPage = () => {
-  const sessionMachine = useContext(store)
-  const { state } = sessionMachine
-  const token = state !== undefined ? state.context.token : null
   return (
     <>
       <SEO title="Home" />
       <div className="p-5">
         <h1>Your Profile</h1>
-        <PlayerProfileForm token={token} />
+        <PlayerProfileForm />
       </div>
     </>
   )
