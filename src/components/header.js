@@ -4,6 +4,7 @@ import { store } from "src/store"
 import PropTypes from "prop-types"
 import useIsClient from "src/hooks/use-is-client"
 import ServerStatus from "src/components/server-status"
+import ToastDemo from "src/components/toast-demo"
 
 const Header = ({ siteTitle }) => {
   const { isClient, key } = useIsClient()
@@ -26,7 +27,8 @@ const Header = ({ siteTitle }) => {
           <h1>{siteTitle}</h1>
         </Link>
         <p>{`User: ${user}`}</p>
-
+        <ToastDemo />
+        <p>Nice and Toasty!!!</p>
         {/* <pre>{JSON.stringify(state.value, null, 2)}</pre> */}
         {/* <pre>{JSON.stringify(state.context.user.Credits, null, 2)}</pre> */}
       </div>

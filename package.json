@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "author": "Taylor Young <tdy721@gmail.com>",
   "dependencies": {
+    "@popperjs/core": "^2.9.1",
     "@reach/router": "^1.3.4",
     "@xstate/react": "^1.0.3",
     "bootstrap": "^5.0.0-beta3",

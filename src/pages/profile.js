@@ -1,56 +1,10 @@
-import React, { useContext, useEffect, useState, useRef } from "react"
-import { Toast } from "bootstrap"
+import React, { useContext } from "react"
 import { store } from "src/store"
 // import { Link } from "gatsby"
 import SEO from "src/components/seo"
 import { useMachine } from "@xstate/react"
 import userProfileMachineFactory from "src/machines/user-profile"
 // import fetchTriggerMachineFactory from "src/machines/fetch-trigger"
-
-const ToastDemo = () => {
-  var [toast, setToast] = useState(false)
-  const toastRef = useRef()
-
-  useEffect(() => {
-    var myToast = toastRef.current
-    var bsToast = bootstrap.Toast.getInstance(myToast)
-
-    if (!bsToast) {
-      // initialize Toast
-      bsToast = new Toast(myToast, { autohide: false })
-      // hide after init
-      bsToast.hide()
-      setToast(false)
-    } else {
-      // toggle
-      toast ? bsToast.show() : bsToast.hide()
-    }
-  })
-
-  return (
-    <div className="py-2">
-      <button
-        className="btn btn-success"
-        onClick={() => setToast(toast => !toast)}
-      >
-        Toast {toast ? "hide" : "show"}
-      </button>
-      <div className="toast" role="alert" ref={toastRef}>
-        <div className="toast-header">
-          <strong className="me-auto">Bootstrap 5</strong>
-          <small>4 mins ago</small>
-          <button
-            type="button"
-            className="btn-close"
-            onClick={() => setToast(false)}
-            aria-label="Close"
-          ></button>
-        </div>
-        <div className="toast-body">Hello, world! This is a toast message.</div>
-      </div>
-    </div>
-  )
-}
 
 const PlayerProfileForm = ({ token }) => {
   const [user, send] = useMachine(userProfileMachineFactory(token))
@@ -125,8 +79,8 @@ const PlayerProfileForm = ({ token }) => {
       >
         Update
       </button>
-      <p>Nice and Toasty!!!</p>
-      <ToastDemo />
+      {/*  */}
+      {/* <ToastDemo /> */}
       {/* <pre>{JSON.stringify(user.value, null, 2)}</pre> */}
       {/* <pre>{JSON.stringify(user.context, null, 2)}</pre> */}
     </form>

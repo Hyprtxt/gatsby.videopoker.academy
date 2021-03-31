@@ -25,6 +25,7 @@ const sessionMachineFactory = (loginURL, token, user) =>
         user: user || null,
         token: token || null,
         error: null,
+        toasts: [],
       },
       states: {
         static: {

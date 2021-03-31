@@ -9,10 +9,19 @@ import React from "react"
 // import PropTypes from "prop-types"
 import Header from "./header"
 
-const Layout = () => {
+const Layout = props => {
+  const { children } = props
   return (
     <>
       <Header siteTitle={`VideoPoker.Academy`} />
+      {children}
+      <footer
+        style={{
+          marginTop: `2rem`,
+        }}
+      >
+        <p>© {new Date().getFullYear()}, built by Taylor</p>
+      </footer>
     </>
   )
 }

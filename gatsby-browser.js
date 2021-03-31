@@ -34,15 +34,7 @@ exports.wrapPageElement = ({ element, props }) => {
   // including location, data, etc - you don't need to pass it
   return (
     <>
-      <Layout {...props}></Layout>
-      {element}
-      <footer
-        style={{
-          marginTop: `2rem`,
-        }}
-      >
-        © {new Date().getFullYear()}, built by Taylor
-      </footer>
+      <Layout {...props}>{element}</Layout>
     </>
   )
 }
