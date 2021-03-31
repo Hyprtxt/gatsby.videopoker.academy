@@ -1,6 +1,6 @@
 const React = require("react")
 const Layout = require("src/components/layout").default
-const { XStateProvider } = require("src/store")
+const { XStateProvider, ToastProvider } = require("src/store")
 
 /**
  * Implement Gatsby's Browser APIs in this file.

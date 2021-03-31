@@ -22,9 +22,9 @@ export const toasterMachine = Machine({
   on: {
     "TOAST.CREATE": {
       actions: [
-        (context, event) => {
-          console.log("TOAST.CREATE", event.id)
-        },
+        // (context, event) => {
+        // console.log("TOAST.CREATE", event)
+        // },
         assign({
           toasts: (context, event) => {
             const newToast = createToast(event.message.trim())
@@ -37,9 +37,9 @@ export const toasterMachine = Machine({
     },
     "TOAST.HIDE": {
       actions: [
-        (context, event) => {
-          console.log("TOAST.HIDE", event.id)
-        },
+        // (context, event) => {
+        // console.log("TOAST.HIDE", event.id)
+        // },
         assign({
           toasts: (context, event) =>
             context.toasts.map(toast => {
@@ -53,9 +53,9 @@ export const toasterMachine = Machine({
     },
     "TOAST.DESTROY": {
       actions: [
-        (context, event) => {
-          console.log("TOAST.DESTROY", event)
-        },
+        // (context, event) => {
+        // console.log("TOAST.DESTROY", event.id)
+        // },
         assign({
           toasts: (context, event) =>
             context.toasts.filter(toast => toast.id !== event.id),

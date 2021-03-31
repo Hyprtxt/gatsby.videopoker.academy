@@ -12,7 +12,7 @@ const OneToast = props => {
     const theRef = toastRef.current
     let bsToast = Toast.getInstance(theRef)
     if (!bsToast) {
-      bsToast = new Toast(theRef, { autohide: false })
+      bsToast = new Toast(theRef, { autohide: true, delay: 5000 })
     }
     hide ? bsToast.hide() : bsToast.show()
     theRef.addEventListener("hidden.bs.toast", destroyToast)
@@ -23,7 +23,7 @@ const OneToast = props => {
   return (
     <div
       className="toast"
-      // className={`toast toast-${id}`}
+      // id={`toast-${id}`}
       role="alert"
       ref={toastRef}
     >
@@ -36,7 +36,6 @@ const OneToast = props => {
           onClick={() => {
             handler("TOAST.HIDE", { id })
           }}
-          // data-bs-dismiss="toast"
           aria-label="Close"
         ></button>
       </div>

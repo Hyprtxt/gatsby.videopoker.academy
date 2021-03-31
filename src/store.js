@@ -1,6 +1,7 @@
 // store.js
 import React, { createContext } from "react"
 import sessionMachineFactory from "src/machines/session"
+import { toasterMachine } from "src/machines/toaster-machine"
 import { useMachine } from "@xstate/react"
 
 const initialState = {}
@@ -16,6 +17,7 @@ const XStateProvider = ({ children }) => {
   const [state, send] = useMachine(
     sessionMachineFactory(storage.loginURL, storage.token, storage.user)
   )
+  const [toastState, toastSend] = useMachine(toasterMachine)
   // if (storage.token) {
   //   console.log("We are logged in")
   //   token = storage.token
@@ -27,7 +29,16 @@ const XStateProvider = ({ children }) => {
   //     send({ type: "LOGIN", loginURL: storage.loginURL })
   //   }
   // }
-  return <Provider value={{ state, send }}>{children}</Provider>
+  return (
+    <Provider value={{ state, send, toastState, toastSend }}>
+      {children}
+    </Provider>
+  )
 }
+
+// const ToastProvider = ({ children }) => {
+
+//   return <Provider value={{ toastState, toastSend }}>{children}</Provider>
+// }
 
 export { store, XStateProvider }

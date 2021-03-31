@@ -23,7 +23,9 @@ const IndexPage = () => {
         <h1>{`Hi ${user}`}</h1>
         <p>This is a website, you may:</p>
         <ul>
-          {stateValue === "inactive" && <li id="link-inactive">P̶l̶a̶y̶ ̶t̶h̶e̶ ̶g̶a̶m̶e̶ ̶o̶n̶l̶i̶n̶e̶</li>}
+          {stateValue === "inactive" && (
+            <li id="link-inactive">P̶l̶a̶y̶ ̶t̶h̶e̶ ̶g̶a̶m̶e̶ ̶o̶n̶l̶i̶n̶e̶</li>
+          )}
           {stateValue === "inactive" && (
             <li id="link-login">
               <Link to="/login">Join/Login with provider</Link>

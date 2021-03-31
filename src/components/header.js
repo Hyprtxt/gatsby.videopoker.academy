@@ -19,15 +19,17 @@ const Header = ({ siteTitle }) => {
     }
   }
   return (
-    <header className="mt-3 fixed-bottom">
-      <div className="bg-info px-3 py-1">
-        <ServerStatus success={false} />
-        <Link to="/">
-          <h1>{siteTitle}</h1>
-        </Link>
-        <p>{`User: ${user}`}</p>
-      </div>
-    </header>
+    <>
+      <header className="mt-3 fixed-bottom">
+        <div className="bg-info px-3 py-1">
+          <ServerStatus success={false} />
+          <Link to="/">
+            <h1>{siteTitle}</h1>
+          </Link>
+          <p>{`User: ${user}`}</p>
+        </div>
+      </header>
+    </>
   )
 }
 

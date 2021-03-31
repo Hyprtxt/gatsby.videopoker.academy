@@ -8,7 +8,7 @@ import Toaster from "src/components/toaster"
 
 const ToastDemo = () => {
   // console.log(toasterMachine)
-  const [state, send] = useMachine(toasterMachine)
+  const [toastState, toastSend] = useMachine(toasterMachine)
   // console.log
   return (
     <>
@@ -16,15 +16,17 @@ const ToastDemo = () => {
         {/* <p>Nice and Toasty!!!</p> */}
         <button
           className="btn btn-success"
-          onClick={() => send("TOAST.CREATE", { message: "This is a toast!" })}
+          onClick={() =>
+            toastSend("TOAST.CREATE", { message: "This is a cool toast!" })
+          }
         >
           {/* Toast {toast_active ? "hide" : "show"} */}
           Toast BTN
         </button>
         {/* <p>A TOAST HERE</p> */}
-        <pre>{JSON.stringify(state.context, null, 2)}</pre>
+        {/* <pre>{JSON.stringify(toastState.context, null, 2)}</pre> */}
       </div>
-      <Toaster context={state.context} send={send} />
+      <Toaster context={toastState.context} send={toastSend} />
     </>
   )
 }
