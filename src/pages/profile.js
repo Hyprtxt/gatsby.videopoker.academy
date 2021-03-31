@@ -7,7 +7,9 @@ import userProfileMachineFactory from "src/machines/user-profile"
 // import fetchTriggerMachineFactory from "src/machines/fetch-trigger"
 
 const PlayerProfileForm = ({ token }) => {
-  const [user, send] = useMachine(userProfileMachineFactory(token))
+  const { toastSend } = useContext(store)
+  const [user, send] = useMachine(userProfileMachineFactory(token, toastSend))
+
   return (
     <form
       onSubmit={e => {

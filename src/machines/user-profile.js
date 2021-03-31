@@ -16,7 +16,7 @@ const doFetch = (loginURL, options) => {
     .then(response => response.json())
 }
 
-const userProfileMachine = token =>
+const userProfileMachine = (token, toastSend) =>
   Machine(
     {
       id: "userProfileUpdate",
@@ -43,15 +43,17 @@ const userProfileMachine = token =>
               }),
             onDone: {
               target: "active",
-              actions: assign({
-                response: (context, event) => event.data,
-                id: (context, event) => event.data.id,
-                provider: (context, event) => event.data.provider,
-                handle: (context, event) => event.data.Handle,
-                credits: (context, event) => event.data.Credits,
-                joinTrainerLeaderboards: (context, event) =>
-                  event.data.joinTrainerLeaderboards,
-              }),
+              actions: [
+                assign({
+                  response: (context, event) => event.data,
+                  id: (context, event) => event.data.id,
+                  provider: (context, event) => event.data.provider,
+                  handle: (context, event) => event.data.Handle,
+                  credits: (context, event) => event.data.Credits,
+                  joinTrainerLeaderboards: (context, event) =>
+                    event.data.joinTrainerLeaderboards,
+                }),
+              ],
             },
             onError: {
               target: "error",
@@ -108,15 +110,22 @@ const userProfileMachine = token =>
               }),
             onDone: {
               target: "active",
-              actions: assign({
-                response: (context, event) => event.data,
-                id: (context, event) => event.data.id,
-                provider: (context, event) => event.data.provider,
-                handle: (context, event) => event.data.Handle,
-                credits: (context, event) => event.data.Credits,
-                joinTrainerLeaderboards: (context, event) =>
-                  event.data.joinTrainerLeaderboards,
-              }),
+              actions: [
+                (context, event) => {
+                  toastSend("TOAST.CREATE", {
+                    message: "Success, profile updated",
+                  })
+                },
+                assign({
+                  response: (context, event) => event.data,
+                  id: (context, event) => event.data.id,
+                  provider: (context, event) => event.data.provider,
+                  handle: (context, event) => event.data.Handle,
+                  credits: (context, event) => event.data.Credits,
+                  joinTrainerLeaderboards: (context, event) =>
+                    event.data.joinTrainerLeaderboards,
+                }),
+              ],
             },
             onError: {
               target: "error",

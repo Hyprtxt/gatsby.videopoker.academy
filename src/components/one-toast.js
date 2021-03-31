@@ -41,8 +41,8 @@ const OneToast = props => {
       </div>
       <div className="toast-body">
         {message}
-        <br />
-        <small>{id}</small>
+        {/* <br />
+        <small>{id}</small> */}
         <div className="mt-2 pt-2 border-top">
           <button
             type="button"
