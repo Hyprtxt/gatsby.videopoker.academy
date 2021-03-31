@@ -36,6 +36,11 @@ const IndexPage = () => {
               <Link to="/poker">Play this game online</Link>
             </li>
           )}
+          {stateValue === "active" && (
+            <li id="link-play">
+              <Link to="/profile">Edit your profile</Link>
+            </li>
+          )}
           {/* <li>
             <a href="//knockout.videopoker.academy">Play JS Video Poker</a>
           </li>
