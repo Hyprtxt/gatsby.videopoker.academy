@@ -192,7 +192,13 @@ const pokerMachineFactory = token =>
             0
           )
           // This is a patch
-          const server = JSON.stringify(context.strategy.strategy, null, 0)
+          const server = JSON.stringify(
+            // Don't forget to sort the server suggestions
+            // @todo figure out whyyyyyyyy
+            context.strategy.strategy.sort(),
+            null,
+            0
+          )
           console.log("didPlayerMatch?", player, server)
           return player === server
         },
